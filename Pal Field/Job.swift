@@ -53,6 +53,11 @@ final class Job {
     var sourceEmailThreadId: String?    // Gmail thread ID from imported email
     var sourceEmailMessageId: String?   // RFC 2822 Message-ID header from imported email
 
+    // Convex sync fields
+    var convexId: String?
+    var syncStatusRaw: Int = 1  // Default: pending (new records need sync)
+    var updatedAt: Date = Date()
+
     func itemsSubtotal(settings: Settings) -> Double {
         Double(wireRuns) * settings.priceForWireRun() +
         Double(enclosure) * settings.priceForEnclosure() +

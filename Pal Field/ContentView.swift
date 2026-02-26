@@ -375,8 +375,8 @@ struct ContentView: View {
             gridNavButton(icon: "list.bullet.rectangle", title: "All Jobs", color: .purple, destination: AllJobsView())
             gridNavButton(icon: "building.2.fill", title: "Builders", color: .indigo, destination: BuilderInfoView())
 
-            // Admin tabs - only visible when admin mode is enabled
-            if settings.adminModeEnabled && settings.userRole.canViewAllUsers {
+            // Admin tabs - visible when admin mode is enabled (local role OR Convex role)
+            if settings.adminModeEnabled && (settings.userRole.canViewAllUsers || ClerkAuthManager.shared.userRole == "admin" || ClerkAuthManager.shared.userRole == "manager") {
                 gridNavButton(icon: "person.3.fill", title: "All Jobs", color: .purple.opacity(0.8), destination: AdminJobsView())
                 gridNavButton(icon: "doc.text.fill", title: "All Invoices", color: brandGreen.opacity(0.8), destination: AdminInvoicesView())
                 gridNavButton(icon: "shippingbox.fill", title: "All Inventory", color: .orange.opacity(0.8), destination: AdminInventoryView())

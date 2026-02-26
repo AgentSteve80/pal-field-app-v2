@@ -22,6 +22,11 @@ final class Invoice {
     var ownerEmail: String = ""
     var ownerName: String = ""
 
+    // Convex sync fields
+    var convexId: String?
+    var syncStatusRaw: Int = 1
+    var updatedAt: Date = Date()
+
     init(weekStart: Date = Date(), weekEnd: Date = Date(), total: Double = 0.0, jobCount: Int = 0, pdfData: Data = Data()) {
         self.id = UUID()
         self.weekStart = weekStart

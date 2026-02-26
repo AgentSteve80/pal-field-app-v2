@@ -24,6 +24,11 @@ final class TeamChatMessage {
     var readByRecipient: Bool = false      // For DM read receipts
     var readTimestamp: Date?               // When recipient read it
 
+    // Convex sync fields
+    var convexId: String?
+    var syncStatusRaw: Int = 1
+    var updatedAt: Date = Date()
+
     /// Team chat message initializer
     init(senderName: String, message: String) {
         self.id = UUID()
