@@ -19,8 +19,9 @@ struct EmailMessage: Identifiable, Equatable {
     let snippet: String         // Preview text
     var bodyText: String        // Full plain text body
     var attachments: [EmailAttachment]
+    var rfc2822MessageId: String?  // RFC 2822 Message-ID header for threading
 
-    init(id: String, threadId: String, subject: String, from: String, date: Date, snippet: String, bodyText: String = "", attachments: [EmailAttachment] = []) {
+    init(id: String, threadId: String, subject: String, from: String, date: Date, snippet: String, bodyText: String = "", attachments: [EmailAttachment] = [], rfc2822MessageId: String? = nil) {
         self.id = id
         self.threadId = threadId
         self.subject = subject
@@ -29,6 +30,7 @@ struct EmailMessage: Identifiable, Equatable {
         self.snippet = snippet
         self.bodyText = bodyText
         self.attachments = attachments
+        self.rfc2822MessageId = rfc2822MessageId
     }
 }
 
@@ -86,6 +88,10 @@ struct ParsedJobData {
         !lotNumber.isEmpty
     }
 
+    // Gmail threading info (set when parsed from an email)
+    var sourceEmailThreadId: String?
+    var sourceEmailMessageId: String?
+
     // Convert to Job model
     func toJob(settings: Settings) -> Job {
         let finalJobNumber = jobNumber.isEmpty ? "JB\(lotNumber)" : jobNumber
@@ -113,6 +119,9 @@ struct ParsedJobData {
         // Set owner info for user data isolation
         job.ownerEmail = GmailAuthManager.shared.userEmail
         job.ownerName = settings.workerName
+        // Set Gmail threading info for closeout email replies
+        job.sourceEmailThreadId = sourceEmailThreadId
+        job.sourceEmailMessageId = sourceEmailMessageId
         return job
     }
 }
