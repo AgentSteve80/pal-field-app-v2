@@ -20,6 +20,11 @@ final class Expense {
     var ownerEmail: String = ""
     var ownerName: String = ""
 
+    // Convex sync fields
+    var convexId: String?
+    var syncStatusRaw: Int = 1
+    var updatedAt: Date = Date()
+
     init(
         date: Date = Date(),
         category: String = "Other",
