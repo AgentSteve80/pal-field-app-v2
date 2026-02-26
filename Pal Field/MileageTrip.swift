@@ -19,6 +19,11 @@ final class MileageTrip {
     var ownerEmail: String = ""
     var ownerName: String = ""
 
+    // Convex sync fields
+    var convexId: String?
+    var syncStatusRaw: Int = 1
+    var updatedAt: Date = Date()
+
     init(startDate: Date = Date(), endDate: Date? = nil, miles: Double = 0, purpose: String = "Work", notes: String = "", ownerEmail: String = "", ownerName: String = "") {
         self.id = UUID()
         self.startDate = startDate

@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import GoogleSignIn
 import UserNotifications
+import ClerkSDK
 
 @main
 struct PalFieldApp: App {
@@ -97,16 +98,25 @@ struct PalFieldApp: App {
 
     var body: some Scene {
         WindowGroup {
-            AppLaunchView()
-                .preferredColorScheme(settings.darkMode ? .dark : .light)
-                .environmentObject(settings)
-                .onOpenURL { url in
-                    GIDSignIn.sharedInstance.handle(url)
-                }
-                .onAppear {
-                    // Schedule background email checking when app launches
-                    backgroundChecker.scheduleBackgroundRefresh()
-                }
+            ClerkProvider(publishableKey: "pk_test_c3VubnktbWFtbWFsLTEwLmNsZXJrLmFjY291bnRzLmRldiQ") {
+                AppLaunchView()
+                    .preferredColorScheme(settings.darkMode ? .dark : .light)
+                    .environmentObject(settings)
+                    .onOpenURL { url in
+                        GIDSignIn.sharedInstance.handle(url)
+                    }
+                    .onAppear {
+                        // Schedule background email checking when app launches
+                        backgroundChecker.scheduleBackgroundRefresh()
+
+                        // Configure Clerk auth & Convex sync
+                        ClerkAuthManager.shared.configure()
+                        ConvexSyncManager.shared.configure(container: container)
+
+                        // Start network monitoring
+                        _ = NetworkMonitor.shared
+                    }
+            }
         }
         .modelContainer(container)
         .backgroundTask(.appRefresh("com.palfield.emailcheck")) {
@@ -120,11 +130,14 @@ struct PalFieldApp: App {
 struct AppLaunchView: View {
     @State private var splashFinished = false
     @AppStorage("hasCompletedOnboarding") private var isOnboardingComplete = false
+    @ObservedObject private var authManager = ClerkAuthManager.shared
+    @State private var showingSignIn = false
+    @AppStorage("hasSkippedSignIn") private var hasSkippedSignIn = false
 
     var body: some View {
         ZStack {
             if isOnboardingComplete {
-                // Main content (always rendered underneath)
+                // Main content (always rendered underneath — never gated behind auth)
                 ContentView()
                     .opacity(splashFinished ? 1 : 0)
 
@@ -136,6 +149,18 @@ struct AppLaunchView: View {
             } else {
                 // Show onboarding for new users
                 OnboardingView(isOnboardingComplete: $isOnboardingComplete)
+            }
+        }
+        .sheet(isPresented: $showingSignIn) {
+            SignInView()
+        }
+        .onAppear {
+            // After onboarding, prompt sign-in once if not authenticated and haven't skipped
+            if isOnboardingComplete && !authManager.isAuthenticated && !hasSkippedSignIn {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    showingSignIn = true
+                    hasSkippedSignIn = true  // Only show auto-prompt once
+                }
             }
         }
     }
