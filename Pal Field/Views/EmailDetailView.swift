@@ -51,7 +51,11 @@ struct EmailDetailView: View {
     init(email: EmailMessage) {
         self.email = email
         // Parse email on initialization - will be updated after OCR
-        _parsedData = State(initialValue: EmailParser.parse(subject: email.subject, bodyText: email.bodyText))
+        var parsed = EmailParser.parse(subject: email.subject, bodyText: email.bodyText)
+        // Store Gmail threading info for closeout email replies
+        parsed.sourceEmailThreadId = email.threadId
+        parsed.sourceEmailMessageId = email.rfc2822MessageId
+        _parsedData = State(initialValue: parsed)
     }
 
     private var calculatedTotal: Double {

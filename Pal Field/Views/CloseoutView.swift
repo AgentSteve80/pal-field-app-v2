@@ -428,7 +428,9 @@ struct CloseoutView: View {
                 try await GmailService().sendCloseoutEmail(
                     subject: subject,
                     body: body,
-                    images: closeoutImages
+                    images: closeoutImages,
+                    threadId: job.sourceEmailThreadId,
+                    inReplyTo: job.sourceEmailMessageId
                 )
 
                 await MainActor.run {

@@ -200,6 +200,7 @@ class GmailService {
         let subject = headers.first(where: { $0.name.lowercased() == "subject" })?.value ?? "(No Subject)"
         let from = headers.first(where: { $0.name.lowercased() == "from" })?.value ?? "(Unknown)"
         let dateString = headers.first(where: { $0.name.lowercased() == "date" })?.value ?? ""
+        let messageIdHeader = headers.first(where: { $0.name.lowercased() == "message-id" })?.value
 
         // Parse date
         let date = parseEmailDate(dateString) ?? Date()
@@ -221,7 +222,8 @@ class GmailService {
             date: date,
             snippet: snippet,
             bodyText: bodyText,
-            attachments: attachments
+            attachments: attachments,
+            rfc2822MessageId: messageIdHeader
         )
     }
 
@@ -511,7 +513,8 @@ class GmailService {
     // MARK: - Closeout Email
 
     /// Send a closeout email with photos to scheduling
-    func sendCloseoutEmail(subject: String, body: String, images: [UIImage]) async throws {
+    /// If threadId and inReplyTo are provided, the email is sent as a reply in the original thread
+    func sendCloseoutEmail(subject: String, body: String, images: [UIImage], threadId: String? = nil, inReplyTo: String? = nil) async throws {
         let accessToken = try await authManager.getAccessToken()
         let userEmail = try await getUserEmail()
         let toAddress = "plvscheduling@pallowvoltage.com"
@@ -525,7 +528,8 @@ class GmailService {
             to: toAddress,
             subject: subject,
             body: body,
-            images: imageDataArray
+            images: imageDataArray,
+            inReplyTo: inReplyTo
         )
 
         // Encode to base64url
@@ -546,10 +550,13 @@ class GmailService {
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        let payload: [String: Any] = ["raw": base64Message]
+        var payload: [String: Any] = ["raw": base64Message]
+        if let threadId = threadId {
+            payload["threadId"] = threadId
+        }
         request.httpBody = try JSONSerialization.data(withJSONObject: payload)
 
-        print("📤 Sending closeout to: \(toAddress)")
+        print("📤 Sending closeout to: \(toAddress)\(threadId != nil ? " (threading into \(threadId!))" : "")")
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
@@ -565,8 +572,8 @@ class GmailService {
         print("✅ Closeout sent successfully!")
     }
 
-    /// Build MIME message for closeout (new email, not a reply)
-    private func buildCloseoutMimeMessage(from: String, to: String, subject: String, body: String, images: [Data]) -> String {
+    /// Build MIME message for closeout (reply if inReplyTo provided, otherwise new email)
+    private func buildCloseoutMimeMessage(from: String, to: String, subject: String, body: String, images: [Data], inReplyTo: String? = nil) -> String {
         let boundary = "boundary_\(UUID().uuidString)"
 
         var message = ""
@@ -575,6 +582,10 @@ class GmailService {
         message += "From: \(from)\r\n"
         message += "To: \(to)\r\n"
         message += "Subject: \(subject)\r\n"
+        if let inReplyTo = inReplyTo {
+            message += "In-Reply-To: \(inReplyTo)\r\n"
+            message += "References: \(inReplyTo)\r\n"
+        }
         message += "MIME-Version: 1.0\r\n"
 
         if images.isEmpty {
