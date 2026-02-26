@@ -1,0 +1,177 @@
+//
+//  ClerkAuthManager.swift
+//  Pal Field
+//
+//  Manages Clerk authentication state. Caches tokens locally so the app
+//  works offline after first sign-in. Does NOT gate any existing functionality.
+//
+
+import Foundation
+import SwiftUI
+import Combine
+import ClerkSDK
+
+@MainActor
+final class ClerkAuthManager: ObservableObject {
+    static let shared = ClerkAuthManager()
+
+    // MARK: - Published State
+
+    /// Whether a valid Clerk session exists (cached or live)
+    @Published var isAuthenticated: Bool = false
+
+    /// Current user's Clerk ID
+    @Published var clerkUserId: String?
+
+    /// Current user's email from Clerk
+    @Published var clerkEmail: String?
+
+    /// Current user's display name
+    @Published var clerkDisplayName: String?
+
+    /// User role from Convex (cached locally)
+    @Published var userRole: String = "tech"
+
+    /// Whether Clerk SDK is still loading
+    @Published var isLoading: Bool = true
+
+    /// Error message for display
+    @Published var errorMessage: String?
+
+    // MARK: - Private
+
+    private let clerk = Clerk.shared
+
+    /// Keys for local token cache
+    private let cachedTokenKey = "clerkCachedSessionToken"
+    private let cachedUserIdKey = "clerkCachedUserId"
+    private let cachedEmailKey = "clerkCachedEmail"
+    private let cachedDisplayNameKey = "clerkCachedDisplayName"
+    private let cachedRoleKey = "clerkCachedRole"
+
+    private var sessionObserver: AnyCancellable?
+
+    private init() {
+        // Load cached auth state immediately (offline support)
+        loadCachedAuth()
+    }
+
+    // MARK: - Public API
+
+    /// Configure Clerk SDK — call once at app launch
+    func configure() {
+        // Clerk iOS SDK auto-configures from the publishable key set in ClerkProvider
+        // We just need to observe session changes
+        observeSessionChanges()
+    }
+
+    /// Get a fresh JWT token for Convex API calls.
+    /// Returns cached token if offline.
+    func getToken() async -> String? {
+        // Try to get a fresh token from Clerk session
+        if let session = clerk.session {
+            do {
+                let tokenResource = try await session.getToken()
+                let jwt = tokenResource?.jwt
+                if let jwt {
+                    UserDefaults.standard.set(jwt, forKey: cachedTokenKey)
+                }
+                return jwt
+            } catch {
+                print("⚠️ ClerkAuth: Failed to get fresh token: \(error)")
+            }
+        }
+
+        // Fall back to cached token
+        return UserDefaults.standard.string(forKey: cachedTokenKey)
+    }
+
+    /// Sign out — clears cached tokens
+    func signOut() async {
+        do {
+            try await clerk.signOut()
+        } catch {
+            print("⚠️ ClerkAuth: Sign out error: \(error)")
+        }
+
+        clearCachedAuth()
+        isAuthenticated = false
+        clerkUserId = nil
+        clerkEmail = nil
+        clerkDisplayName = nil
+        userRole = "tech"
+    }
+
+    /// Whether we have any cached credentials (for offline access)
+    var hasCachedCredentials: Bool {
+        UserDefaults.standard.string(forKey: cachedTokenKey) != nil
+    }
+
+    // MARK: - Private Helpers
+
+    private func loadCachedAuth() {
+        if let userId = UserDefaults.standard.string(forKey: cachedUserIdKey) {
+            clerkUserId = userId
+            clerkEmail = UserDefaults.standard.string(forKey: cachedEmailKey)
+            clerkDisplayName = UserDefaults.standard.string(forKey: cachedDisplayNameKey)
+            userRole = UserDefaults.standard.string(forKey: cachedRoleKey) ?? "tech"
+            isAuthenticated = true
+        }
+        isLoading = false
+    }
+
+    private func cacheAuth(userId: String, email: String?, displayName: String?) {
+        UserDefaults.standard.set(userId, forKey: cachedUserIdKey)
+        if let email { UserDefaults.standard.set(email, forKey: cachedEmailKey) }
+        if let displayName { UserDefaults.standard.set(displayName, forKey: cachedDisplayNameKey) }
+    }
+
+    private func clearCachedAuth() {
+        UserDefaults.standard.removeObject(forKey: cachedTokenKey)
+        UserDefaults.standard.removeObject(forKey: cachedUserIdKey)
+        UserDefaults.standard.removeObject(forKey: cachedEmailKey)
+        UserDefaults.standard.removeObject(forKey: cachedDisplayNameKey)
+        UserDefaults.standard.removeObject(forKey: cachedRoleKey)
+    }
+
+    private func observeSessionChanges() {
+        // Observe Clerk session/user state
+        sessionObserver = clerk.objectWillChange.sink { [weak self] _ in
+            Task { @MainActor in
+                self?.handleSessionChange()
+            }
+        }
+        // Check current state immediately
+        handleSessionChange()
+    }
+
+    private func handleSessionChange() {
+        if let user = clerk.user {
+            let userId = user.id
+            let email = user.primaryEmailAddress?.emailAddress
+            let displayName = "\(user.firstName ?? "") \(user.lastName ?? "")".trimmingCharacters(in: .whitespaces)
+
+            clerkUserId = userId
+            clerkEmail = email
+            clerkDisplayName = displayName.isEmpty ? email : displayName
+            isAuthenticated = true
+            isLoading = false
+
+            cacheAuth(userId: userId, email: email, displayName: displayName.isEmpty ? nil : displayName)
+
+            // Trigger Convex user upsert in background
+            Task {
+                await ConvexSyncManager.shared.upsertUser()
+            }
+        } else if clerk.session == nil && !hasCachedCredentials {
+            isAuthenticated = false
+            isLoading = false
+        }
+    }
+
+    /// Update cached role from Convex
+    func updateCachedRole(_ role: String) {
+        userRole = role
+        UserDefaults.standard.set(role, forKey: cachedRoleKey)
+    }
+}

@@ -80,6 +80,7 @@ struct SettingsView: View {
                 iCloudBackupSection
                 backupRestoreSection
                 widgetDebugSection
+                syncStatusSection
                 if settings.userRole == .developer {
                     developerSection
                 }
@@ -142,10 +143,17 @@ struct SettingsView: View {
             .sheet(isPresented: $showingICloudBackups) {
                 iCloudBackupsSheet
             }
+            .sheet(isPresented: $showingClerkSignIn) {
+                SignInView()
+            }
         }
     }
 
     // MARK: - Form Sections
+
+    @ObservedObject private var clerkAuth = ClerkAuthManager.shared
+    @ObservedObject private var syncManager = ConvexSyncManager.shared
+    @ObservedObject private var networkMonitor = NetworkMonitor.shared
 
     private var accountSection: some View {
         Section("Account") {
@@ -154,6 +162,36 @@ struct SettingsView: View {
                 Spacer()
                 Text(settings.userRole.rawValue)
                     .foregroundStyle(.secondary)
+            }
+
+            // Clerk auth status
+            if clerkAuth.isAuthenticated {
+                HStack {
+                    Image(systemName: "person.crop.circle.fill")
+                        .foregroundStyle(.green)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(clerkAuth.clerkDisplayName ?? "Signed In")
+                            .font(.subheadline)
+                        Text(clerkAuth.clerkEmail ?? "")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(.green)
+                }
+
+                Button(role: .destructive) {
+                    Task { await clerkAuth.signOut() }
+                } label: {
+                    Label("Sign Out of Pal Cloud", systemImage: "rectangle.portrait.and.arrow.right")
+                }
+            } else {
+                Button {
+                    showingClerkSignIn = true
+                } label: {
+                    Label("Sign in to Pal Cloud", systemImage: "person.crop.circle.badge.plus")
+                }
             }
 
             if settings.userRole.canEdit {
@@ -167,6 +205,8 @@ struct SettingsView: View {
             }
         }
     }
+
+    @State private var showingClerkSignIn = false
 
     private var adminSection: some View {
         Section("Admin Tools") {
@@ -523,6 +563,54 @@ struct SettingsView: View {
 
         } header: {
             Text("Widget Diagnostics")
+        }
+    }
+
+    private var syncStatusSection: some View {
+        Section {
+            HStack {
+                Image(systemName: networkMonitor.isConnected ? "wifi" : "wifi.slash")
+                    .foregroundStyle(networkMonitor.isConnected ? .green : .red)
+                Text(networkMonitor.isConnected ? "Online" : "Offline")
+                Spacer()
+                if syncManager.isSyncing {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                }
+            }
+
+            if clerkAuth.isAuthenticated {
+                if let lastSync = syncManager.lastSyncDate {
+                    HStack {
+                        Text("Last sync")
+                        Spacer()
+                        Text(lastSync, style: .relative)
+                            .foregroundStyle(.secondary)
+                    }
+                    .font(.caption)
+                }
+
+                if let error = syncManager.lastError {
+                    Text(error)
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                }
+
+                Button {
+                    syncManager.triggerSync()
+                } label: {
+                    Label("Sync Now", systemImage: "arrow.triangle.2.circlepath")
+                }
+                .disabled(syncManager.isSyncing || !networkMonitor.isConnected)
+            } else {
+                Text("Sign in to enable cloud sync")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        } header: {
+            Text("Cloud Sync")
+        } footer: {
+            Text("Data syncs automatically in the background when online. Your local data is always available offline.")
         }
     }
 

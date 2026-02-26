@@ -49,6 +49,11 @@ final class Job {
     var partsUsedJSON: String = ""     // JSON: [{"name":"Enp3050","qty":"1"},...]
     var ftdmCount: Int = 0             // Flextube to Dmark count
 
+    // Convex sync fields
+    var convexId: String?
+    var syncStatusRaw: Int = 1  // Default: pending (new records need sync)
+    var updatedAt: Date = Date()
+
     func itemsSubtotal(settings: Settings) -> Double {
         Double(wireRuns) * settings.priceForWireRun() +
         Double(enclosure) * settings.priceForEnclosure() +
