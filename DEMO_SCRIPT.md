@@ -1,4 +1,4 @@
-# PreWire Pro - Demo Script
+# Pal Field - Demo Script
 
 **Total Runtime: ~2.5 minutes**
 
@@ -9,7 +9,7 @@
 *[Tap app icon → Splash screen animation]*
 
 **NARRATION:**
-"PreWire Pro - the all-in-one job tracking app built for low-voltage technicians."
+"Pal Field - the all-in-one job tracking app built for low-voltage technicians."
 
 ---
 
@@ -45,7 +45,7 @@
 *[Messages → Open email → Onsite → Photo → Job form → Save]*
 
 **NARRATION:**
-"PreWire Pro connects to your Gmail. When a job assignment comes in, open it, tap Onsite to send photos to scheduling, and the job form unlocks with the address already filled in. What used to take ten minutes now takes thirty seconds - without ever leaving the app."
+"Pal Field connects to your Gmail. When a job assignment comes in, open it, tap Onsite to send photos to scheduling, and the job form unlocks with the address already filled in. What used to take ten minutes now takes thirty seconds - without ever leaving the app."
 
 ---
 
@@ -72,7 +72,7 @@
 *[Tap Tax Summary card → Show breakdown]*
 
 **NARRATION:**
-"No surprises at tax time. PreWire Pro calculates your self-employment tax, federal, and state estimates throughout the year based on your actual earnings and deductions."
+"No surprises at tax time. Pal Field calculates your self-employment tax, federal, and state estimates throughout the year based on your actual earnings and deductions."
 
 ---
 
@@ -108,7 +108,7 @@
 *[Return to dashboard with logo visible]*
 
 **NARRATION:**
-"PreWire Pro. Built by a technician, for technicians. Track jobs, maximize deductions, get paid faster."
+"Pal Field. Built by a technician, for technicians. Track jobs, maximize deductions, get paid faster."
 
 ---
 
