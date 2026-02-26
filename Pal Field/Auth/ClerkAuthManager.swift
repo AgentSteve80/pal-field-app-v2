@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 import Combine
-import ClerkSDK
+import ClerkKit
 
 @MainActor
 final class ClerkAuthManager: ObservableObject {

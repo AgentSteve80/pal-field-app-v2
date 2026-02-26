@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 import GoogleSignIn
 import UserNotifications
-import ClerkSDK
+import ClerkKit
 
 @main
 struct PalFieldApp: App {
@@ -18,6 +18,9 @@ struct PalFieldApp: App {
     let backgroundChecker = BackgroundEmailChecker.shared
 
     init() {
+        // Configure Clerk at app launch
+        Clerk.configure(publishableKey: "pk_test_c3VubnktbWFtbWFsLTEwLmNsZXJrLmFjY291bnRzLmRldiQ")
+
         // Request notification permission (background task registered via .backgroundTask modifier)
         backgroundChecker.requestNotificationPermission()
 
@@ -98,27 +101,25 @@ struct PalFieldApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ClerkProvider(publishableKey: "pk_test_c3VubnktbWFtbWFsLTEwLmNsZXJrLmFjY291bnRzLmRldiQ") {
-                AppLaunchView()
-                    .preferredColorScheme(settings.darkMode ? .dark : .light)
-                    .environmentObject(settings)
-                    .onOpenURL { url in
-                        GIDSignIn.sharedInstance.handle(url)
-                    }
-                    .onAppear {
-                        // Schedule background email checking when app launches
-                        backgroundChecker.scheduleBackgroundRefresh()
-                        // Request notification permissions on first launch
-                        NotificationManager.shared.requestPermission()
+            AppLaunchView()
+                .preferredColorScheme(settings.darkMode ? .dark : .light)
+                .environmentObject(settings)
+                .environment(Clerk.shared)
+                .onOpenURL { url in
+                    GIDSignIn.sharedInstance.handle(url)
+                }
+                .onAppear {
+                    // Schedule background email checking when app launches
+                    backgroundChecker.scheduleBackgroundRefresh()
+                    // Request notification permissions on first launch
+                    NotificationManager.shared.requestPermission()
 
-                        // Configure Clerk auth & Convex sync
-                        ClerkAuthManager.shared.configure()
-                        ConvexSyncManager.shared.configure(container: container)
+                    // Configure Convex sync
+                    ConvexSyncManager.shared.configure(container: container)
 
-                        // Start network monitoring
-                        _ = NetworkMonitor.shared
-                    }
-            }
+                    // Start network monitoring
+                    _ = NetworkMonitor.shared
+                }
         }
         .modelContainer(container)
         .backgroundTask(.appRefresh("com.palfield.emailcheck")) {
