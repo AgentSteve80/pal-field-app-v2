@@ -228,6 +228,7 @@ struct EditJobView: View {
                         // Ensure changes are processed and saved
                         do {
                             try modelContext.save()
+                            HapticManager.success()
                             // Notify that job data changed (for widget cache update)
                             NotificationCenter.default.post(name: .jobDataDidChange, object: nil)
                             // Small delay to ensure SwiftData processes the save
@@ -235,6 +236,7 @@ struct EditJobView: View {
                                 dismiss()
                             }
                         } catch {
+                            HapticManager.error()
                             print("Failed to save job: \(error)")
                         }
                     }
@@ -259,6 +261,7 @@ struct EditJobView: View {
     }
 
     private func deleteJob() {
+        HapticManager.warning()
         modelContext.delete(job)
         dismiss()
     }

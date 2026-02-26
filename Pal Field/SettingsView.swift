@@ -46,6 +46,16 @@ struct SettingsView: View {
     @State private var showingICloudAccountAlert = false
     @State private var showingAccessDenied = false
     @State private var showingClearChatConfirmation = false
+    @State private var morningDigestEnabled = UserDefaults.standard.bool(forKey: "morningDigestEnabled")
+    @State private var morningDigestTime: Date = {
+        let hour = UserDefaults.standard.object(forKey: "morningDigestHour") as? Int ?? 6
+        let minute = UserDefaults.standard.object(forKey: "morningDigestMinute") as? Int ?? 0
+        var components = DateComponents()
+        components.hour = hour
+        components.minute = minute
+        return Calendar.current.date(from: components) ?? Date()
+    }()
+    @StateObject private var notificationManager = NotificationManager.shared
 
     var lastBackupDate: Date? {
         UserDefaults.standard.object(forKey: "lastBackupDate") as? Date
@@ -65,6 +75,7 @@ struct SettingsView: View {
                 personalInfoSection
                 payTierSection
                 appearanceSection
+                notificationsSection
                 gmailSection
                 iCloudBackupSection
                 backupRestoreSection
@@ -266,6 +277,33 @@ struct SettingsView: View {
     private var appearanceSection: some View {
         Section("Appearance") {
             Toggle("Dark Mode", isOn: $settings.darkMode)
+        }
+    }
+
+    private var notificationsSection: some View {
+        Section {
+            Toggle("Morning Digest", isOn: $morningDigestEnabled)
+                .onChange(of: morningDigestEnabled) { _, enabled in
+                    UserDefaults.standard.set(enabled, forKey: "morningDigestEnabled")
+                    if enabled && !notificationManager.isAuthorized {
+                        notificationManager.requestPermission()
+                    }
+                    notificationManager.scheduleMorningDigest()
+                }
+
+            if morningDigestEnabled {
+                DatePicker("Notification Time", selection: $morningDigestTime, displayedComponents: .hourAndMinute)
+                    .onChange(of: morningDigestTime) { _, newTime in
+                        let components = Calendar.current.dateComponents([.hour, .minute], from: newTime)
+                        UserDefaults.standard.set(components.hour, forKey: "morningDigestHour")
+                        UserDefaults.standard.set(components.minute, forKey: "morningDigestMinute")
+                        notificationManager.scheduleMorningDigest()
+                    }
+            }
+        } header: {
+            Text("Notifications")
+        } footer: {
+            Text("Get a daily reminder to check your jobs for the day.")
         }
     }
 

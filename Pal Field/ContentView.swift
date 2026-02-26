@@ -164,6 +164,10 @@ struct ContentView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
+                    // Offline connectivity banner
+                    OfflineBannerView()
+                        .padding(.horizontal, -16) // full width
+
                     // Trip Tracking Button
                     tripTrackingButton
                         .padding(.horizontal)
