@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftUI
-import Combine
 import ClerkKit
 
 @MainActor
@@ -40,8 +39,6 @@ final class ClerkAuthManager: ObservableObject {
 
     // MARK: - Private
 
-    private let clerk = Clerk.shared
-
     /// Keys for local token cache
     private let cachedTokenKey = "clerkCachedSessionToken"
     private let cachedUserIdKey = "clerkCachedUserId"
@@ -49,7 +46,7 @@ final class ClerkAuthManager: ObservableObject {
     private let cachedDisplayNameKey = "clerkCachedDisplayName"
     private let cachedRoleKey = "clerkCachedRole"
 
-    private var sessionObserver: AnyCancellable?
+    private var observationTask: Task<Void, Never>?
 
     private init() {
         // Load cached auth state immediately (offline support)
@@ -58,21 +55,20 @@ final class ClerkAuthManager: ObservableObject {
 
     // MARK: - Public API
 
-    /// Configure Clerk SDK — call once at app launch
+    /// Configure and start observing Clerk state — call once at app launch
     func configure() {
-        // Clerk iOS SDK auto-configures from the publishable key set in ClerkProvider
-        // We just need to observe session changes
-        observeSessionChanges()
+        startObserving()
     }
 
     /// Get a fresh JWT token for Convex API calls.
     /// Returns cached token if offline.
     func getToken() async -> String? {
+        let clerk = Clerk.shared
+
         // Try to get a fresh token from Clerk session
         if let session = clerk.session {
             do {
-                let tokenResource = try await session.getToken()
-                let jwt = tokenResource?.jwt
+                let jwt = try await session.getToken()
                 if let jwt {
                     UserDefaults.standard.set(jwt, forKey: cachedTokenKey)
                 }
@@ -88,8 +84,9 @@ final class ClerkAuthManager: ObservableObject {
 
     /// Sign out — clears cached tokens
     func signOut() async {
+        let clerk = Clerk.shared
         do {
-            try await clerk.signOut()
+            try await clerk.auth.signOut()
         } catch {
             print("⚠️ ClerkAuth: Sign out error: \(error)")
         }
@@ -134,22 +131,28 @@ final class ClerkAuthManager: ObservableObject {
         UserDefaults.standard.removeObject(forKey: cachedRoleKey)
     }
 
-    private func observeSessionChanges() {
-        // Observe Clerk session/user state
-        sessionObserver = clerk.objectWillChange.sink { [weak self] _ in
-            Task { @MainActor in
+    private func startObserving() {
+        observationTask?.cancel()
+        observationTask = Task { @MainActor [weak self] in
+            // Poll Clerk state periodically until we get a user or task is cancelled
+            while !Task.isCancelled {
                 self?.handleSessionChange()
+                try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
             }
         }
-        // Check current state immediately
+        // Also check immediately
         handleSessionChange()
     }
 
     private func handleSessionChange() {
+        let clerk = Clerk.shared
+        
         if let user = clerk.user {
             let userId = user.id
             let email = user.primaryEmailAddress?.emailAddress
-            let displayName = "\(user.firstName ?? "") \(user.lastName ?? "")".trimmingCharacters(in: .whitespaces)
+            let firstName = user.firstName ?? ""
+            let lastName = user.lastName ?? ""
+            let displayName = "\(firstName) \(lastName)".trimmingCharacters(in: .whitespaces)
 
             clerkUserId = userId
             clerkEmail = email
