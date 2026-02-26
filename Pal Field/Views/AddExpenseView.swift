@@ -241,11 +241,13 @@ struct AddExpenseView: View {
 
         do {
             try modelContext.save()
+            HapticManager.light()
             print("✅ Expense saved: \(category.rawValue) - $\(amountValue) on \(date)")
             if imageData != nil {
                 print("   📸 With receipt image attached")
             }
         } catch {
+            HapticManager.error()
             print("❌ Failed to save expense: \(error)")
         }
 

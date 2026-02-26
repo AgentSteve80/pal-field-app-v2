@@ -279,6 +279,7 @@ struct WeeklyInvoiceView: View {
         modelContext.insert(invoice)
         try? modelContext.save()
 
+        HapticManager.success()
         // Show confirmation
         showingSaveConfirmation = true
     }

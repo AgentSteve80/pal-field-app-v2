@@ -106,6 +106,8 @@ struct PalFieldApp: App {
                 .onAppear {
                     // Schedule background email checking when app launches
                     backgroundChecker.scheduleBackgroundRefresh()
+                    // Request notification permissions on first launch
+                    NotificationManager.shared.requestPermission()
                 }
         }
         .modelContainer(container)
