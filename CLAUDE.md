@@ -4,23 +4,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-PreWire Pro is a SwiftUI iOS application for tracking prewire jobs (low-voltage electrical work) and generating invoices. It manages job data, calculates pricing and taxes, generates PDF invoices, and exports CSV reports for 1099 tax purposes.
+Pal Field is a SwiftUI iOS application for tracking low-voltage electrical jobs and generating invoices. It manages job data, calculates pricing and taxes, generates PDF invoices, and exports CSV reports for 1099 tax purposes.
 
 ## Build & Run
 
 Build and run in Xcode:
 ```bash
-open "PreWire Pro.xcodeproj"
+open "Pal Field.xcodeproj"
 ```
 
 Or build from command line:
 ```bash
-xcodebuild -project "PreWire Pro.xcodeproj" -scheme "PreWire Pro" -sdk iphoneos build
+xcodebuild -project "Pal Field.xcodeproj" -scheme "Pal Field" -sdk iphoneos build
 ```
 
 For simulator:
 ```bash
-xcodebuild -project "PreWire Pro.xcodeproj" -scheme "PreWire Pro" -sdk iphonesimulator build
+xcodebuild -project "Pal Field.xcodeproj" -scheme "Pal Field" -sdk iphonesimulator build
 ```
 
 ## Architecture
@@ -32,7 +32,7 @@ xcodebuild -project "PreWire Pro.xcodeproj" -scheme "PreWire Pro" -sdk iphonesim
 
 ### View Hierarchy
 ```
-PreWireProApp (root)
+PalFieldApp (root)
 └── ContentView (main job list + dashboard)
     ├── AddJobView (sheet)
     ├── EditJobView (NavigationLink)
@@ -84,15 +84,15 @@ Both AddJobView and EditJobView include async MapKit integration:
 
 ### CSV Export (ContentView.swift)
 - **Format**: Job #, Date, Lot, Address, Prospect, Wires, Total $, Miles
-- **File name**: `PreWire_1099_Jobs.csv`
+- **File name**: `PalField_1099_Jobs.csv`
 - Uses `FileDocument` protocol with `.commaSeparatedText` UTType
 - Exported via `fileExporter` modifier
 
 ## File Organization
 
 ```
-PreWire Pro/
-├── PreWireProApp.swift        # App entry point, SwiftData setup
+Pal Field/
+├── PalFieldApp.swift        # App entry point, SwiftData setup
 ├── Job.swift                  # Core data model with pricing logic
 ├── Settings.swift             # App settings (ObservableObject)
 ├── ContentView.swift          # Main list view + dashboard + CSV export
@@ -112,7 +112,7 @@ Jobs require `jobNumber`, `lotNumber`, and `address` to be non-empty before savi
 - All date formatting for PDFs uses `DateFormatter` or `formatted()` with explicit patterns
 
 ### SwiftData Context
-- Model container configured in `PreWireProApp` with `.modelContainer(for: Job.self)`
+- Model container configured in `PalFieldApp` with `.modelContainer(for: Job.self)`
 - All views access via `@Environment(\.modelContext)`
 - Jobs deleted via `modelContext.delete()` with swipe actions
 - Changes saved with `try? modelContext.save()`

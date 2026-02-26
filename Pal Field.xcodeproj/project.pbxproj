@@ -1,0 +1,1318 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		497BC4642EEF0E7300A4E663 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 497BC4632EEF0E7300A4E663 /* GoogleSignIn */; };
+		49A0CC9D2F3185DA0023C95F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A0CC9C2F3185DA0023C95F /* WidgetKit.framework */; };
+		49A0CC9F2F3185DA0023C95F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A0CC9E2F3185DA0023C95F /* SwiftUI.framework */; };
+		49A0CCB02F3185DB0023C95F /* PalFieldWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 49A0CC9B2F3185DA0023C95F /* PalFieldWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		49A0CCC72F3186230023C95F /* Pal Field Watch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 49A0CCC62F3186230023C95F /* Pal Field Watch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		498A5A282EC694B300466528 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 498A5A102EC694B100466528 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 498A5A172EC694B200466528;
+			remoteInfo = "Pal Field";
+		};
+		498A5A322EC694B300466528 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 498A5A102EC694B100466528 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 498A5A172EC694B200466528;
+			remoteInfo = "Pal Field";
+		};
+		49A0CCAE2F3185DB0023C95F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 498A5A102EC694B100466528 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49A0CC9A2F3185DA0023C95F;
+			remoteInfo = PalFieldWidgetsExtension;
+		};
+		49A0CCC82F3186230023C95F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 498A5A102EC694B100466528 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49A0CCC52F3186230023C95F;
+			remoteInfo = "Pal Field Watch Watch App";
+		};
+		49A0CCD62F3186240023C95F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 498A5A102EC694B100466528 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49A0CCC52F3186230023C95F;
+			remoteInfo = "Pal Field Watch Watch App";
+		};
+		49A0CCE02F3186240023C95F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 498A5A102EC694B100466528 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49A0CCC52F3186230023C95F;
+			remoteInfo = "Pal Field Watch Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		49A0CCB52F3185DB0023C95F /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				49A0CCB02F3185DB0023C95F /* PalFieldWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CCEA2F3186240023C95F /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				49A0CCC72F3186230023C95F /* Pal Field Watch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		498A5A182EC694B200466528 /* Pal Field.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pal Field.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		498A5A272EC694B300466528 /* Pal FieldTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pal FieldTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		498A5A312EC694B300466528 /* Pal FieldUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pal FieldUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		49A0CC9B2F3185DA0023C95F /* PalFieldWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PalFieldWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		49A0CC9C2F3185DA0023C95F /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		49A0CC9E2F3185DA0023C95F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		49A0CCC12F3186230023C95F /* Pal Field Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pal Field Watch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		49A0CCC62F3186230023C95F /* Pal Field Watch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pal Field Watch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		49A0CCD52F3186240023C95F /* Pal Field Watch Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pal Field Watch Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		49A0CCDF2F3186240023C95F /* Pal Field Watch Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pal Field Watch Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		49A0CD042F33CBB20023C95F /* PalFieldWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PalFieldWidgetsExtension.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		49A0CCB12F3185DB0023C95F /* Exceptions for "PalFieldWidgets" folder in "PalFieldWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 49A0CC9A2F3185DA0023C95F /* PalFieldWidgetsExtension */;
+		};
+		49A0CCF62F3187E70023C95F /* Exceptions for "Pal Field" folder in "PalFieldWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Expense.swift,
+				InventoryItem.swift,
+				Invoice.swift,
+				Job.swift,
+				MileageTrip.swift,
+				Settings.swift,
+				Shared/AppGroupConstants.swift,
+				Shared/SharedModelContainer.swift,
+				Shared/SharedSettings.swift,
+			);
+			target = 49A0CC9A2F3185DA0023C95F /* PalFieldWidgetsExtension */;
+		};
+		49A0CCF72F3187E70023C95F /* Exceptions for "Pal Field" folder in "Pal Field Watch Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Shared/AppGroupConstants.swift,
+			);
+			target = 49A0CCC52F3186230023C95F /* Pal Field Watch Watch App */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		498A5A1A2EC694B200466528 /* Pal Field */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				49A0CCF62F3187E70023C95F /* Exceptions for "Pal Field" folder in "PalFieldWidgetsExtension" target */,
+				49A0CCF72F3187E70023C95F /* Exceptions for "Pal Field" folder in "Pal Field Watch Watch App" target */,
+			);
+			path = "Pal Field";
+			sourceTree = "<group>";
+		};
+		498A5A2A2EC694B300466528 /* Pal FieldTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Pal FieldTests";
+			sourceTree = "<group>";
+		};
+		498A5A342EC694B300466528 /* Pal FieldUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Pal FieldUITests";
+			sourceTree = "<group>";
+		};
+		49A0CCA02F3185DA0023C95F /* PalFieldWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				49A0CCB12F3185DB0023C95F /* Exceptions for "PalFieldWidgets" folder in "PalFieldWidgetsExtension" target */,
+			);
+			path = PalFieldWidgets;
+			sourceTree = "<group>";
+		};
+		49A0CCCA2F3186230023C95F /* Pal Field Watch Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Pal Field Watch Watch App";
+			sourceTree = "<group>";
+		};
+		49A0CCD82F3186240023C95F /* Pal Field Watch Watch AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Pal Field Watch Watch AppTests";
+			sourceTree = "<group>";
+		};
+		49A0CCE22F3186240023C95F /* Pal Field Watch Watch AppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Pal Field Watch Watch AppUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		498A5A152EC694B200466528 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				497BC4642EEF0E7300A4E663 /* GoogleSignIn in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		498A5A242EC694B300466528 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		498A5A2E2EC694B300466528 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CC982F3185DA0023C95F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49A0CC9F2F3185DA0023C95F /* SwiftUI.framework in Frameworks */,
+				49A0CC9D2F3185DA0023C95F /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CCC32F3186230023C95F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CCD22F3186240023C95F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CCDC2F3186240023C95F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		497BC4622EEF0E7300A4E663 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				49A0CC9C2F3185DA0023C95F /* WidgetKit.framework */,
+				49A0CC9E2F3185DA0023C95F /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		498A5A0F2EC694B100466528 = {
+			isa = PBXGroup;
+			children = (
+				49A0CD042F33CBB20023C95F /* PalFieldWidgetsExtension.entitlements */,
+				498A5A1A2EC694B200466528 /* Pal Field */,
+				498A5A2A2EC694B300466528 /* Pal FieldTests */,
+				498A5A342EC694B300466528 /* Pal FieldUITests */,
+				49A0CCA02F3185DA0023C95F /* PalFieldWidgets */,
+				49A0CCCA2F3186230023C95F /* Pal Field Watch Watch App */,
+				49A0CCD82F3186240023C95F /* Pal Field Watch Watch AppTests */,
+				49A0CCE22F3186240023C95F /* Pal Field Watch Watch AppUITests */,
+				498A5A192EC694B200466528 /* Products */,
+				497BC4622EEF0E7300A4E663 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		498A5A192EC694B200466528 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				498A5A182EC694B200466528 /* Pal Field.app */,
+				498A5A272EC694B300466528 /* Pal FieldTests.xctest */,
+				498A5A312EC694B300466528 /* Pal FieldUITests.xctest */,
+				49A0CC9B2F3185DA0023C95F /* PalFieldWidgetsExtension.appex */,
+				49A0CCC12F3186230023C95F /* Pal Field Watch.app */,
+				49A0CCC62F3186230023C95F /* Pal Field Watch Watch App.app */,
+				49A0CCD52F3186240023C95F /* Pal Field Watch Watch AppTests.xctest */,
+				49A0CCDF2F3186240023C95F /* Pal Field Watch Watch AppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		498A5A172EC694B200466528 /* Pal Field */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 498A5A3B2EC694B300466528 /* Build configuration list for PBXNativeTarget "Pal Field" */;
+			buildPhases = (
+				498A5A142EC694B200466528 /* Sources */,
+				498A5A152EC694B200466528 /* Frameworks */,
+				498A5A162EC694B200466528 /* Resources */,
+				49A0CCB52F3185DB0023C95F /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				49A0CCAF2F3185DB0023C95F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				498A5A1A2EC694B200466528 /* Pal Field */,
+			);
+			name = "Pal Field";
+			packageProductDependencies = (
+				497BC4632EEF0E7300A4E663 /* GoogleSignIn */,
+			);
+			productName = "Pal Field";
+			productReference = 498A5A182EC694B200466528 /* Pal Field.app */;
+			productType = "com.apple.product-type.application";
+		};
+		498A5A262EC694B300466528 /* Pal FieldTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 498A5A3E2EC694B300466528 /* Build configuration list for PBXNativeTarget "Pal FieldTests" */;
+			buildPhases = (
+				498A5A232EC694B300466528 /* Sources */,
+				498A5A242EC694B300466528 /* Frameworks */,
+				498A5A252EC694B300466528 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				498A5A292EC694B300466528 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				498A5A2A2EC694B300466528 /* Pal FieldTests */,
+			);
+			name = "Pal FieldTests";
+			packageProductDependencies = (
+			);
+			productName = "Pal FieldTests";
+			productReference = 498A5A272EC694B300466528 /* Pal FieldTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		498A5A302EC694B300466528 /* Pal FieldUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 498A5A412EC694B300466528 /* Build configuration list for PBXNativeTarget "Pal FieldUITests" */;
+			buildPhases = (
+				498A5A2D2EC694B300466528 /* Sources */,
+				498A5A2E2EC694B300466528 /* Frameworks */,
+				498A5A2F2EC694B300466528 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				498A5A332EC694B300466528 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				498A5A342EC694B300466528 /* Pal FieldUITests */,
+			);
+			name = "Pal FieldUITests";
+			packageProductDependencies = (
+			);
+			productName = "Pal FieldUITests";
+			productReference = 498A5A312EC694B300466528 /* Pal FieldUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		49A0CC9A2F3185DA0023C95F /* PalFieldWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49A0CCB22F3185DB0023C95F /* Build configuration list for PBXNativeTarget "PalFieldWidgetsExtension" */;
+			buildPhases = (
+				49A0CC972F3185DA0023C95F /* Sources */,
+				49A0CC982F3185DA0023C95F /* Frameworks */,
+				49A0CC992F3185DA0023C95F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				49A0CCA02F3185DA0023C95F /* PalFieldWidgets */,
+			);
+			name = PalFieldWidgetsExtension;
+			packageProductDependencies = (
+			);
+			productName = PalFieldWidgetsExtension;
+			productReference = 49A0CC9B2F3185DA0023C95F /* PalFieldWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		49A0CCC02F3186230023C95F /* Pal Field Watch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49A0CCEB2F3186240023C95F /* Build configuration list for PBXNativeTarget "Pal Field Watch" */;
+			buildPhases = (
+				49A0CCBF2F3186230023C95F /* Resources */,
+				49A0CCEA2F3186240023C95F /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				49A0CCC92F3186230023C95F /* PBXTargetDependency */,
+			);
+			name = "Pal Field Watch";
+			packageProductDependencies = (
+			);
+			productName = "Pal Field Watch";
+			productReference = 49A0CCC12F3186230023C95F /* Pal Field Watch.app */;
+			productType = "com.apple.product-type.application.watchapp2-container";
+		};
+		49A0CCC52F3186230023C95F /* Pal Field Watch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49A0CCE72F3186240023C95F /* Build configuration list for PBXNativeTarget "Pal Field Watch Watch App" */;
+			buildPhases = (
+				49A0CCC22F3186230023C95F /* Sources */,
+				49A0CCC32F3186230023C95F /* Frameworks */,
+				49A0CCC42F3186230023C95F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				49A0CCCA2F3186230023C95F /* Pal Field Watch Watch App */,
+			);
+			name = "Pal Field Watch Watch App";
+			packageProductDependencies = (
+			);
+			productName = "Pal Field Watch Watch App";
+			productReference = 49A0CCC62F3186230023C95F /* Pal Field Watch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		49A0CCD42F3186240023C95F /* Pal Field Watch Watch AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49A0CCEE2F3186240023C95F /* Build configuration list for PBXNativeTarget "Pal Field Watch Watch AppTests" */;
+			buildPhases = (
+				49A0CCD12F3186240023C95F /* Sources */,
+				49A0CCD22F3186240023C95F /* Frameworks */,
+				49A0CCD32F3186240023C95F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				49A0CCD72F3186240023C95F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				49A0CCD82F3186240023C95F /* Pal Field Watch Watch AppTests */,
+			);
+			name = "Pal Field Watch Watch AppTests";
+			packageProductDependencies = (
+			);
+			productName = "Pal Field Watch Watch AppTests";
+			productReference = 49A0CCD52F3186240023C95F /* Pal Field Watch Watch AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		49A0CCDE2F3186240023C95F /* Pal Field Watch Watch AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49A0CCF12F3186240023C95F /* Build configuration list for PBXNativeTarget "Pal Field Watch Watch AppUITests" */;
+			buildPhases = (
+				49A0CCDB2F3186240023C95F /* Sources */,
+				49A0CCDC2F3186240023C95F /* Frameworks */,
+				49A0CCDD2F3186240023C95F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				49A0CCE12F3186240023C95F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				49A0CCE22F3186240023C95F /* Pal Field Watch Watch AppUITests */,
+			);
+			name = "Pal Field Watch Watch AppUITests";
+			packageProductDependencies = (
+			);
+			productName = "Pal Field Watch Watch AppUITests";
+			productReference = 49A0CCDF2F3186240023C95F /* Pal Field Watch Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		498A5A102EC694B100466528 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					498A5A172EC694B200466528 = {
+						CreatedOnToolsVersion = 26.1.1;
+						LastSwiftMigration = 2610;
+					};
+					498A5A262EC694B300466528 = {
+						CreatedOnToolsVersion = 26.1.1;
+						TestTargetID = 498A5A172EC694B200466528;
+					};
+					498A5A302EC694B300466528 = {
+						CreatedOnToolsVersion = 26.1.1;
+						TestTargetID = 498A5A172EC694B200466528;
+					};
+					49A0CC9A2F3185DA0023C95F = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					49A0CCC02F3186230023C95F = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					49A0CCC52F3186230023C95F = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					49A0CCD42F3186240023C95F = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 49A0CCC52F3186230023C95F;
+					};
+					49A0CCDE2F3186240023C95F = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 49A0CCC52F3186230023C95F;
+					};
+				};
+			};
+			buildConfigurationList = 498A5A132EC694B100466528 /* Build configuration list for PBXProject "Pal Field" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 498A5A0F2EC694B100466528;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				49399DF12EEE74E90010C05F /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 498A5A192EC694B200466528 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				498A5A172EC694B200466528 /* Pal Field */,
+				498A5A262EC694B300466528 /* Pal FieldTests */,
+				498A5A302EC694B300466528 /* Pal FieldUITests */,
+				49A0CC9A2F3185DA0023C95F /* PalFieldWidgetsExtension */,
+				49A0CCC02F3186230023C95F /* Pal Field Watch */,
+				49A0CCC52F3186230023C95F /* Pal Field Watch Watch App */,
+				49A0CCD42F3186240023C95F /* Pal Field Watch Watch AppTests */,
+				49A0CCDE2F3186240023C95F /* Pal Field Watch Watch AppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		498A5A162EC694B200466528 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		498A5A252EC694B300466528 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		498A5A2F2EC694B300466528 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CC992F3185DA0023C95F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CCBF2F3186230023C95F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CCC42F3186230023C95F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CCD32F3186240023C95F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CCDD2F3186240023C95F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		498A5A142EC694B200466528 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		498A5A232EC694B300466528 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		498A5A2D2EC694B300466528 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CC972F3185DA0023C95F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CCC22F3186230023C95F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CCD12F3186240023C95F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49A0CCDB2F3186240023C95F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		498A5A292EC694B300466528 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 498A5A172EC694B200466528 /* Pal Field */;
+			targetProxy = 498A5A282EC694B300466528 /* PBXContainerItemProxy */;
+		};
+		498A5A332EC694B300466528 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 498A5A172EC694B200466528 /* Pal Field */;
+			targetProxy = 498A5A322EC694B300466528 /* PBXContainerItemProxy */;
+		};
+		49A0CCAF2F3185DB0023C95F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49A0CC9A2F3185DA0023C95F /* PalFieldWidgetsExtension */;
+			targetProxy = 49A0CCAE2F3185DB0023C95F /* PBXContainerItemProxy */;
+		};
+		49A0CCC92F3186230023C95F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49A0CCC52F3186230023C95F /* Pal Field Watch Watch App */;
+			targetProxy = 49A0CCC82F3186230023C95F /* PBXContainerItemProxy */;
+		};
+		49A0CCD72F3186240023C95F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49A0CCC52F3186230023C95F /* Pal Field Watch Watch App */;
+			targetProxy = 49A0CCD62F3186240023C95F /* PBXContainerItemProxy */;
+		};
+		49A0CCE12F3186240023C95F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49A0CCC52F3186230023C95F /* Pal Field Watch Watch App */;
+			targetProxy = 49A0CCE02F3186240023C95F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		498A5A392EC694B300466528 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		498A5A3A2EC694B300466528 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		498A5A3C2EC694B300466528 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "Pal Field/Pal Field.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B69AUBX65S;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Pal-Field-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Pal Field";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "For Taking Receipt Pictures";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "For Mileage tracking";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Pal Field/Pal Field-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		498A5A3D2EC694B300466528 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "Pal Field/Pal Field.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B69AUBX65S;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Pal-Field-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Pal Field";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "For Taking Receipt Pictures";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "For Mileage tracking";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Pal Field/Pal Field-Bridging-Header.h";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		498A5A3F2EC694B300466528 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pal Field.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pal Field";
+			};
+			name = Debug;
+		};
+		498A5A402EC694B300466528 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pal Field.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pal Field";
+			};
+			name = Release;
+		};
+		498A5A422EC694B300466528 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Pal Field";
+			};
+			name = Debug;
+		};
+		498A5A432EC694B300466528 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Pal Field";
+			};
+			name = Release;
+		};
+		49A0CCB32F3185DB0023C95F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = PalFieldWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B69AUBX65S;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PalFieldWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PalFieldWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.widgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "WIDGET_EXTENSION $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		49A0CCB42F3185DB0023C95F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = PalFieldWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B69AUBX65S;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PalFieldWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PalFieldWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.widgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "WIDGET_EXTENSION $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		49A0CCE82F3186240023C95F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Pal Field Watch Watch App/Pal Field Watch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B69AUBX65S;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pal Field Watch";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.watch.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		49A0CCE92F3186240023C95F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Pal Field Watch Watch App/Pal Field Watch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B69AUBX65S;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pal Field Watch";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.watch.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
+		49A0CCEC2F3186240023C95F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B69AUBX65S;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pal Field Watch";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.watch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		49A0CCED2F3186240023C95F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B69AUBX65S;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pal Field Watch";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.watch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		49A0CCEF2F3186240023C95F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B69AUBX65S;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.watch.tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pal Field Watch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pal Field Watch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		49A0CCF02F3186240023C95F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B69AUBX65S;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.watch.tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pal Field Watch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pal Field Watch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
+		49A0CCF22F3186240023C95F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B69AUBX65S;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.watch.uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "Pal Field Watch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		49A0CCF32F3186240023C95F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B69AUBX65S;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pallowvoltage.fieldapp.watch.uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "Pal Field Watch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		498A5A132EC694B100466528 /* Build configuration list for PBXProject "Pal Field" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				498A5A392EC694B300466528 /* Debug */,
+				498A5A3A2EC694B300466528 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		498A5A3B2EC694B300466528 /* Build configuration list for PBXNativeTarget "Pal Field" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				498A5A3C2EC694B300466528 /* Debug */,
+				498A5A3D2EC694B300466528 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		498A5A3E2EC694B300466528 /* Build configuration list for PBXNativeTarget "Pal FieldTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				498A5A3F2EC694B300466528 /* Debug */,
+				498A5A402EC694B300466528 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		498A5A412EC694B300466528 /* Build configuration list for PBXNativeTarget "Pal FieldUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				498A5A422EC694B300466528 /* Debug */,
+				498A5A432EC694B300466528 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49A0CCB22F3185DB0023C95F /* Build configuration list for PBXNativeTarget "PalFieldWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49A0CCB32F3185DB0023C95F /* Debug */,
+				49A0CCB42F3185DB0023C95F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49A0CCE72F3186240023C95F /* Build configuration list for PBXNativeTarget "Pal Field Watch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49A0CCE82F3186240023C95F /* Debug */,
+				49A0CCE92F3186240023C95F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49A0CCEB2F3186240023C95F /* Build configuration list for PBXNativeTarget "Pal Field Watch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49A0CCEC2F3186240023C95F /* Debug */,
+				49A0CCED2F3186240023C95F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49A0CCEE2F3186240023C95F /* Build configuration list for PBXNativeTarget "Pal Field Watch Watch AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49A0CCEF2F3186240023C95F /* Debug */,
+				49A0CCF02F3186240023C95F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49A0CCF12F3186240023C95F /* Build configuration list for PBXNativeTarget "Pal Field Watch Watch AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49A0CCF22F3186240023C95F /* Debug */,
+				49A0CCF32F3186240023C95F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		49399DF12EEE74E90010C05F /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		497BC4632EEF0E7300A4E663 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49399DF12EEE74E90010C05F /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 498A5A102EC694B100466528 /* Project object */;
+}
