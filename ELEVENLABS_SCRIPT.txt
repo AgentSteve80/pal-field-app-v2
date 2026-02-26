@@ -1,0 +1,80 @@
+PREWIRE PRO - ELEVENLABS SCRIPT
+================================
+
+Generate each clip separately in ElevenLabs, then import to iMovie.
+
+
+-------------------
+CLIP 1 (10 seconds)
+-------------------
+
+PreWire Pro - the all-in-one job tracking app built for low-voltage technicians. Your dashboard shows week and year earnings, miles driven, and tax estimates - all at a glance.
+
+
+-------------------
+CLIP 2 (1 min 22 sec)
+-------------------
+
+The Messages tab connects directly to your Gmail. Job assignments come in with all the details you need - address, lot number, and builder info.
+
+When you arrive on site, tap the Onsite button to notify scheduling. Take photos and send them instantly - no switching between apps.
+
+You can also view attached blueprints and photos right here, so you know exactly what you're walking into before you start.
+
+Scroll down and you'll see the job address. Tap it and it opens directly in Maps, ready to start navigation. No copying and pasting addresses.
+
+Now let's create the job. The form auto-populates with info from the email. Add your wire runs, enclosures, flat panels, and other items. Watch the total calculate live as you go. Pricing is based on your pay tier, which you set in settings.
+
+The mileage from your home address calculates automatically. When you're done, tap save - and the job is logged, ready for your weekly invoice.
+
+
+-------------------
+CLIP 3 (21 seconds)
+-------------------
+
+Track every mile with GPS precision. Tap start when you leave, and the app tracks in the background - even when your phone is locked. When you arrive, tap stop and save the trip. Every mile counts at tax time.
+
+
+-------------------
+CLIP 4 (29 seconds)
+-------------------
+
+The Invoices tab shows all your generated invoices. Create a new one with a tap. Select your date range, and every job in that period is automatically included. Generate a professional PDF with itemized pricing, addresses, and totals - ready to send to your contractor.
+
+
+-------------------
+CLIP 5 (30 seconds)
+-------------------
+
+The Tax Summary keeps you prepared year-round. See your gross income, mileage deductions, and expenses all in one place. PreWire Pro calculates your estimated self-employment tax, federal tax, and state tax based on your actual numbers. No surprises when tax season comes.
+
+
+-------------------
+CLIP 6 (8 seconds)
+-------------------
+
+Add widgets to your home screen for quick access. And with the Apple Watch app, start and stop mileage tracking right from your wrist.
+
+
+-------------------
+CLIP 7 (54 seconds)
+-------------------
+
+The Inventory tab helps you track your materials and equipment. Add items with photos, quantities, and notes. Perfect for keeping track of wire spools, enclosures, brackets, and tools.
+
+Need to share your inventory? Tap share to send via email or text. Great for ordering supplies or showing your contractor what you have on hand.
+
+Keep everything organized so you always know what's in your truck and what needs restocking.
+
+
+================================
+TOTAL RUNTIME: ~4 minutes
+================================
+
+TIPS FOR ELEVENLABS:
+- Use voice "Adam" or "Josh" for professional male
+- Use voice "Rachel" for professional female
+- Set stability to 50%, clarity to 75%
+- Generate each clip separately
+- Download as MP3
+- Import all MP3s into iMovie audio track

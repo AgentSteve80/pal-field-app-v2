@@ -1,0 +1,68 @@
+PREWIRE PRO - DESCRIPT VOICEOVER SCRIPT
+=======================================
+
+Instructions:
+1. Upload your screen recordings to Descript
+2. Arrange clips in order (1-11)
+3. Add AI voiceover using this script
+4. Match each paragraph to its clip
+
+
+[CLIP 1 - APP LAUNCH]
+
+PreWire Pro - the all-in-one job tracking app built for low-voltage technicians.
+
+
+[CLIP 2 - DASHBOARD]
+
+Your dashboard shows everything at a glance. Week and year earnings, miles driven, and your estimated tax liability - all updated in real-time as you work.
+
+
+[CLIP 3 - ADD JOB]
+
+Adding a job takes seconds. Tap the plus button, enter your lot number and address, and log what you installed. The job number auto-generates, mileage calculates from your home address, and pricing fills in based on your pay tier. Watch the total update live as you add items.
+
+
+[CLIP 4 - INVOICE]
+
+At the end of the week, generate a professional invoice with one tap. Every job is itemized with addresses, lot numbers, and a complete pricing breakdown. Export as PDF and send directly to your contractor.
+
+
+[CLIP 5 - EMAIL TO JOB]
+
+PreWire Pro connects to your Gmail. When a job assignment comes in, open it, tap Onsite to send photos to scheduling, and the job form unlocks with the address already filled in. What used to take ten minutes now takes thirty seconds - without ever leaving the app.
+
+
+[CLIP 6 - MILEAGE TRACKING]
+
+Track every mile with GPS precision. Tap to start when you leave, tap to stop when you arrive. The app tracks in the background - even when your phone is locked. At sixty-seven cents per mile, accurate tracking means real money back at tax time.
+
+
+[CLIP 7 - WEATHER]
+
+Check the weather before you head out. See current conditions and the forecast so you know what you're walking into.
+
+
+[CLIP 8 - TAX SUMMARY]
+
+No surprises at tax time. PreWire Pro calculates your self-employment tax, federal, and state estimates throughout the year based on your actual earnings and deductions.
+
+
+[CLIP 9 - ALL JOBS]
+
+Every job you've logged is searchable and organized. Review past work, edit details, or export your complete history for your accountant.
+
+
+[CLIP 10 - WIDGETS]
+
+Add widgets to your home screen for instant visibility. See your earnings without even opening the app.
+
+
+[CLIP 11 - SETTINGS]
+
+Customize your pay tier, connect Gmail, and configure your tax settings - all in one place.
+
+
+[CLOSING]
+
+PreWire Pro. Built by a technician, for technicians. Track jobs, maximize deductions, get paid faster.
