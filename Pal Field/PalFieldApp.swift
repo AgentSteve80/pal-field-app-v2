@@ -19,6 +19,7 @@ struct PalFieldApp: App {
 
     init() {
         // Configure Clerk at app launch
+        print("🔧 Pal Field build: 2f8b2e0")
         Clerk.configure(publishableKey: "pk_test_c3VubnktbWFtbWFsLTEwLmNsZXJrLmFjY291bnRzLmRldiQ")
 
         // Request notification permission (background task registered via .backgroundTask modifier)
