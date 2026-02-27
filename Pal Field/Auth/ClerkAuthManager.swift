@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-import Clerk
+import ClerkKit
 
 @MainActor
 final class ClerkAuthManager: ObservableObject {
