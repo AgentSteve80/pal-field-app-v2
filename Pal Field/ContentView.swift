@@ -376,6 +376,7 @@ struct ContentView: View {
             gridNavButton(icon: "cloud.sun.fill", title: "Weather", color: .cyan, destination: WeatherView())
             gridNavButton(icon: "doc.text.fill", title: "Invoices", color: brandGreen, destination: InvoicesView())
             gridNavButton(icon: "receipt.fill", title: "Expenses", color: .red, destination: ExpensesView())
+            gridNavButton(icon: "map.fill", title: "Route", color: .teal, destination: JobRouteMapView())
             gridNavButton(icon: "list.bullet.rectangle", title: "All Jobs", color: .purple, destination: AllJobsView())
             gridNavButton(icon: "building.2.fill", title: "Builders", color: .indigo, destination: BuilderInfoView())
 

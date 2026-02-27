@@ -40,6 +40,8 @@ struct EditJobView: View {
     @State private var geocodeQuery: String
     @State private var showDeleteAlert = false
     @State private var showingCloseout = false
+    @State private var voiceNotePath: String?
+    @State private var jobNotes: String
 
     var liveTotal: Double {
         let tempJob = Job(
@@ -78,6 +80,8 @@ struct EditJobView: View {
         _serviceRun = State(initialValue: job.serviceRun)
         _miles = State(initialValue: job.miles)
         _geocodeQuery = State(initialValue: job.address + " subdivision, north Indianapolis, IN")
+        _voiceNotePath = State(initialValue: job.voiceNotePath)
+        _jobNotes = State(initialValue: job.superNotes)
     }
 
     var body: some View {
@@ -127,6 +131,15 @@ struct EditJobView: View {
                     Stepper("Media Box (\(settings.priceForMediaBox(), specifier: "$%.0f") ea): \(mediaBox)", value: $mediaBox, in: 0...5)
                     Stepper("Dry Run (\(settings.priceForDryRun(), specifier: "$%.0f")): \(dryRun)", value: $dryRun, in: 0...3)
                     Stepper("Service Run 30min (\(settings.priceForServiceRun(), specifier: "$%.0f")): \(serviceRun)", value: $serviceRun, in: 0...10)
+                }
+
+                Section("Voice Note") {
+                    VoiceNoteView(voiceNotePath: $voiceNotePath, notes: $jobNotes)
+                    if !jobNotes.isEmpty {
+                        Text(jobNotes)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 Section("Mileage (For Tax Purposes)") {
@@ -208,6 +221,8 @@ struct EditJobView: View {
                         job.serviceRun = serviceRun
                         job.miles = miles
                         job.payTierValue = settings.payTier.rawValue
+                        job.voiceNotePath = voiceNotePath
+                        job.superNotes = jobNotes
 
                         // If miles were added (from 0 or increased), create a MileageTrip
                         if miles > originalMiles && originalMiles == 0 {

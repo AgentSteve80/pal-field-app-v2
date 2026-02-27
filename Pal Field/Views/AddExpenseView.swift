@@ -186,28 +186,43 @@ struct AddExpenseView: View {
 
         print("📸 Processing receipt...")
 
-        // Scan receipt for text
+        // Run enhanced OCR parser for category guessing
+        let ocrResult = await ReceiptOCRParser.parseReceipt(image: image)
+
+        // Also run existing scanner for compatibility
         let scannedData = await ReceiptScanner.scanReceipt(image)
 
         await MainActor.run {
             self.scannedData = scannedData
 
-            // Auto-populate fields if they're currently empty
-            if let scannedAmount = scannedData.amount, amount.isEmpty {
-                amount = String(format: "%.2f", scannedAmount)
-                print("✓ Auto-filled amount: $\(scannedAmount)")
+            // Use OCR parser results with fallback to existing scanner
+            let finalAmount = ocrResult.totalAmount ?? scannedData.amount
+            let finalMerchant = ocrResult.vendorName ?? scannedData.merchant
+            let finalDate = ocrResult.date ?? scannedData.date
+
+            if let amt = finalAmount, amount.isEmpty {
+                amount = String(format: "%.2f", amt)
+                print("✓ Auto-filled amount: $\(amt)")
             }
 
-            if let scannedMerchant = scannedData.merchant, merchant.isEmpty {
-                merchant = scannedMerchant
-                print("✓ Auto-filled merchant: \(scannedMerchant)")
+            if let merch = finalMerchant, merchant.isEmpty {
+                merchant = merch
+                print("✓ Auto-filled merchant: \(merch)")
             }
 
-            if let scannedDate = scannedData.date {
-                date = scannedDate
-                print("✓ Auto-filled date: \(scannedDate)")
+            if let d = finalDate {
+                date = d
+                print("✓ Auto-filled date: \(d)")
             }
 
+            // Auto-fill category based on vendor
+            if let suggestedCategory = ocrResult.suggestedCategory,
+               let cat = ExpenseCategory(rawValue: suggestedCategory) {
+                category = cat
+                print("✓ Auto-filled category: \(suggestedCategory)")
+            }
+
+            HapticManager.success()
             isProcessingReceipt = false
             print("✅ Receipt processing complete")
         }
