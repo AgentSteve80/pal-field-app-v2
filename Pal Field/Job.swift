@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import UIKit
 
 @Model
 final class Job {
@@ -51,6 +52,14 @@ final class Job {
 
     // Voice note
     var voiceNotePath: String?          // Path to recorded voice note audio file
+
+    // Onsite photo (thumbnail for All Jobs list)
+    var onsitePhotoPath: String?        // Path to onsite verification photo
+
+    // Closeout email archive
+    var closeoutEmailSubject: String?
+    var closeoutEmailBody: String?
+    var closeoutPhotoPathsJSON: String? // JSON array of file paths to closeout photos
 
     // Gmail threading fields (for closeout email replies)
     var sourceEmailThreadId: String?    // Gmail thread ID from imported email
@@ -139,6 +148,33 @@ final class Job {
     /// Formatted parts list for closeout email
     var partsListFormatted: String {
         closeoutParts.map { "\($0.quantity) \($0.name)" }.joined(separator: "\n")
+    }
+
+    // MARK: - Closeout Photo Paths
+
+    var closeoutPhotoPaths: [String] {
+        get {
+            guard let json = closeoutPhotoPathsJSON,
+                  let data = json.data(using: .utf8),
+                  let paths = try? JSONDecoder().decode([String].self, from: data) else {
+                return []
+            }
+            return paths
+        }
+        set {
+            if let data = try? JSONEncoder().encode(newValue),
+               let json = String(data: data, encoding: .utf8) {
+                closeoutPhotoPathsJSON = json
+            }
+        }
+    }
+
+    /// Load the onsite thumbnail image
+    var onsiteThumbnail: UIImage? {
+        guard let path = onsitePhotoPath else { return nil }
+        let url = URL(fileURLWithPath: path)
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return UIImage(data: data)
     }
 
     // MARK: - Job Number Helpers
