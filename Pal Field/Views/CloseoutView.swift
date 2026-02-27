@@ -412,11 +412,11 @@ struct CloseoutView: View {
         }
 
         if !palNotes.isEmpty {
-            body += "\nPAL: \(palNotes)"
+            body += "\nPAL Notes: \(palNotes)"
         }
 
         if !superNotes.isEmpty {
-            body += "\n\(superNotes)"
+            body += "\nSuper Notes: \(superNotes)"
         }
 
         body += "\n\nParts\n"
