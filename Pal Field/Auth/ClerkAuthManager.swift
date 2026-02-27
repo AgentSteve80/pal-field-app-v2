@@ -63,13 +63,14 @@ final class ClerkAuthManager: ObservableObject {
 
     /// Get a fresh JWT token for Convex API calls.
     /// Returns cached token if offline.
+    /// Get a JWT for Convex API calls (uses the "convex" JWT template)
     func getToken() async -> String? {
         let clerk = Clerk.shared
 
-        // Try to get a fresh token from Clerk session
+        // Try to get a fresh token from Clerk session using the Convex JWT template
         if let session = clerk.session {
             do {
-                let jwt = try await session.getToken()
+                let jwt = try await session.getToken(template: "convex")
                 if let jwt {
                     UserDefaults.standard.set(jwt, forKey: cachedTokenKey)
                 }
