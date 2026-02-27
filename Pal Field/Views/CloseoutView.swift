@@ -310,19 +310,64 @@ struct CloseoutView: View {
         }
     }
 
+    /// Recently used parts sorted by frequency
+    private var recentParts: [String] {
+        let dict = UserDefaults.standard.dictionary(forKey: "closeoutPartsFrequency") as? [String: Int] ?? [:]
+        return dict.sorted { $0.value > $1.value }.map { $0.key }
+    }
+
+    private func trackPartUsage(_ name: String) {
+        var dict = UserDefaults.standard.dictionary(forKey: "closeoutPartsFrequency") as? [String: Int] ?? [:]
+        dict[name, default: 0] += 1
+        UserDefaults.standard.set(dict, forKey: "closeoutPartsFrequency")
+    }
+
+    private func addPart(_ name: String, qty: String = "1") {
+        let part = CloseoutPart(name: name, quantity: qty)
+        parts.append(part)
+        trackPartUsage(name)
+    }
+
     private var addPartSheet: some View {
         NavigationStack {
             Form {
-                TextField("Part Name", text: $newPartName)
-                    .textInputAutocapitalization(.characters)
+                // Quick-pick from recent parts
+                if !recentParts.isEmpty {
+                    Section("Recent Parts") {
+                        let columns = [GridItem(.adaptive(minimum: 100))]
+                        LazyVGrid(columns: columns, spacing: 8) {
+                            ForEach(recentParts.prefix(12), id: \.self) { partName in
+                                Button {
+                                    addPart(partName)
+                                    showingAddPart = false
+                                } label: {
+                                    Text(partName)
+                                        .font(.caption)
+                                        .fontWeight(.medium)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .frame(maxWidth: .infinity)
+                                        .background(brandGreen.opacity(0.15))
+                                        .foregroundStyle(brandGreen)
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
+                            }
+                        }
+                    }
+                }
 
-                HStack {
-                    Text("Quantity")
-                    Spacer()
-                    TextField("1", text: $newPartQty)
-                        .keyboardType(.numberPad)
-                        .multilineTextAlignment(.trailing)
-                        .frame(width: 60)
+                Section("Custom Part") {
+                    TextField("Part Name", text: $newPartName)
+                        .textInputAutocapitalization(.characters)
+
+                    HStack {
+                        Text("Quantity")
+                        Spacer()
+                        TextField("1", text: $newPartQty)
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                            .frame(width: 60)
+                    }
                 }
             }
             .navigationTitle("Add Part")
@@ -338,7 +383,7 @@ struct CloseoutView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add") {
                         if !newPartName.isEmpty {
-                            parts.append(CloseoutPart(name: newPartName, quantity: newPartQty.isEmpty ? "1" : newPartQty))
+                            addPart(newPartName, qty: newPartQty.isEmpty ? "1" : newPartQty)
                         }
                         newPartName = ""
                         newPartQty = "1"
@@ -348,7 +393,7 @@ struct CloseoutView: View {
                 }
             }
         }
-        .presentationDetents([.height(200)])
+        .presentationDetents([.medium])
     }
 
     // MARK: - Actions
@@ -416,7 +461,7 @@ struct CloseoutView: View {
         }
 
         if !superNotes.isEmpty {
-            body += "\nSuper Notes: \(superNotes)"
+            body += "\nSuper Noted: \(superNotes)"
         }
 
         body += "\n\nParts\n"
