@@ -121,10 +121,13 @@ struct SignInView: View {
         Task {
             do {
                 let clerk = Clerk.shared
-                _ = try await clerk.auth.signInWithPassword(identifier: email, password: password)
+                let signIn = try await clerk.auth.signInWithPassword(identifier: email, password: password)
 
-                // Sign-in succeeded — force an immediate session check
-                print("🔐 SignIn: signInWithPassword succeeded")
+                // Log what we got back
+                print("🔐 SignIn: signInWithPassword returned — status=\(signIn.status)")
+                print("🔐 SignIn: createdSessionId=\(signIn.createdSessionId ?? "nil")")
+                print("🔐 SignIn: firstFactorVerification=\(String(describing: signIn.firstFactorVerification))")
+                print("🔐 SignIn: clerk.session=\(clerk.session?.id ?? "nil"), clerk.user=\(clerk.user?.id ?? "nil")")
                 await MainActor.run {
                     authManager.handleSessionChange()
                     print("🔐 SignIn: isAuthenticated=\(authManager.isAuthenticated)")
