@@ -147,7 +147,7 @@ struct MessagesView: View {
                             Button {
                                 Task {
                                     do {
-                                        try await authManager.signIn()
+                                        _ = try await authManager.signIn()
                                         // Load user-specific settings for the newly signed-in user
                                         await MainActor.run {
                                             Settings.shared.loadUserSettings()

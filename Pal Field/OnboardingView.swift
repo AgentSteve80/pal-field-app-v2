@@ -79,7 +79,7 @@ struct OnboardingView: View {
 
         Task {
             do {
-                try await GmailAuthManager.shared.signIn()
+                _ = try await GmailAuthManager.shared.signIn()
 
                 await MainActor.run {
                     isSigningIn = false

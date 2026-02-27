@@ -121,7 +121,7 @@ struct SignInView: View {
         Task {
             do {
                 let clerk = Clerk.shared
-                let signIn = try await clerk.auth.signInWithPassword(identifier: email, password: password)
+                _ = try await clerk.auth.signInWithPassword(identifier: email, password: password)
 
                 // If we get here without throwing, sign-in succeeded
                 // ClerkAuthManager will pick up the session change
