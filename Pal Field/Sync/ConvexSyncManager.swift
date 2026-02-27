@@ -111,6 +111,9 @@ final class ConvexSyncManager: ObservableObject {
                 return
             }
 
+            // Always ensure user exists in Convex
+            await upsertUser()
+
             // Upload pending local changes
             try await uploadPendingJobs(container: container, token: token)
             try await uploadPendingInvoices(container: container, token: token)
