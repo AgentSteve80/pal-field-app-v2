@@ -58,6 +58,7 @@ final class ClerkAuthManager: ObservableObject {
 
     /// Configure and start observing Clerk state — call once at app launch
     func configure() {
+        print("🔐 ClerkAuth: configure() called — starting observation")
         startObserving()
     }
 
@@ -147,6 +148,7 @@ final class ClerkAuthManager: ObservableObject {
 
     func handleSessionChange() {
         let clerk = Clerk.shared
+        print("🔐 ClerkAuth: polling — user=\(clerk.user?.id ?? "nil"), session=\(clerk.session?.id ?? "nil")")
         
         if let user = clerk.user {
             let userId = user.id

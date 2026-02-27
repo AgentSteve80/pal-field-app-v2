@@ -124,8 +124,10 @@ struct SignInView: View {
                 _ = try await clerk.auth.signInWithPassword(identifier: email, password: password)
 
                 // Sign-in succeeded — force an immediate session check
+                print("🔐 SignIn: signInWithPassword succeeded")
                 await MainActor.run {
                     authManager.handleSessionChange()
+                    print("🔐 SignIn: isAuthenticated=\(authManager.isAuthenticated)")
                     isSigningIn = false
                     dismiss()
                 }
