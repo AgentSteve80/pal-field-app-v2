@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 import GoogleSignIn
 import UserNotifications
-import ClerkKit
+import Clerk
 
 @main
 struct PalFieldApp: App {

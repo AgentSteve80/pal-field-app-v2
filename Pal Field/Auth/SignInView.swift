@@ -8,7 +8,7 @@
 //
 
 import SwiftUI
-import ClerkKit
+import Clerk
 
 struct SignInView: View {
     @ObservedObject private var authManager = ClerkAuthManager.shared
