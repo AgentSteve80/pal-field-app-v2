@@ -151,28 +151,34 @@ class Settings: ObservableObject {
         sharedDefaults?.set(value, forKey: userSpecificKey)
     }
 
+    /// Save directly without email prefix — for personal info that shouldn't be per-account
+    private func syncDirect<T>(_ value: T, forKey key: String) {
+        UserDefaults.standard.set(value, forKey: key)
+        sharedDefaults?.set(value, forKey: key)
+    }
+
     @Published var companyName: String {
-        didSet { syncToShared(companyName, forKey: "companyName") }
+        didSet { syncDirect(companyName, forKey: "companyName") }
     }
 
     @Published var homeAddress: String {
-        didSet { syncToShared(homeAddress, forKey: "homeAddress") }
+        didSet { syncDirect(homeAddress, forKey: "homeAddress") }
     }
 
     @Published var workerName: String {
-        didSet { syncToShared(workerName, forKey: "workerName") }
+        didSet { syncDirect(workerName, forKey: "workerName") }
     }
 
     @Published var phoneNumber: String {
-        didSet { syncToShared(phoneNumber, forKey: "phoneNumber") }
+        didSet { syncDirect(phoneNumber, forKey: "phoneNumber") }
     }
 
     @Published var payNumber: String {
-        didSet { syncToShared(payNumber, forKey: "payNumber") }
+        didSet { syncDirect(payNumber, forKey: "payNumber") }
     }
 
     @Published var darkMode: Bool {
-        didSet { syncToShared(darkMode, forKey: "darkMode") }
+        didSet { syncDirect(darkMode, forKey: "darkMode") }
     }
 
     @Published var payTier: PayTier {
@@ -238,12 +244,13 @@ class Settings: ObservableObject {
             return UserDefaults.standard.string(forKey: userSpecificKey) ?? defaultValue
         }
 
-        self.companyName = getStringValue("companyName", default: "")
-        self.homeAddress = getStringValue("homeAddress", default: "")
-        self.workerName = getStringValue("workerName", default: "")
-        self.phoneNumber = getStringValue("phoneNumber", default: "")
-        self.payNumber = getStringValue("payNumber", default: "")
-        self.darkMode = getValue("darkMode", default: false)
+        // Personal info — always use bare keys (not email-prefixed)
+        self.companyName = UserDefaults.standard.string(forKey: "companyName") ?? ""
+        self.homeAddress = UserDefaults.standard.string(forKey: "homeAddress") ?? ""
+        self.workerName = UserDefaults.standard.string(forKey: "workerName") ?? ""
+        self.phoneNumber = UserDefaults.standard.string(forKey: "phoneNumber") ?? ""
+        self.payNumber = UserDefaults.standard.string(forKey: "payNumber") ?? ""
+        self.darkMode = UserDefaults.standard.bool(forKey: "darkMode")
 
         let tierValue: Int = getValue("payTier", default: PayTier.tier2.rawValue)
         self.payTier = PayTier(rawValue: tierValue) ?? .tier2
