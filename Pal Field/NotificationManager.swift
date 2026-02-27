@@ -24,7 +24,7 @@ final class NotificationManager: ObservableObject {
     
     func requestPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, _ in
-            Task { @MainActor in
+            Task { @MainActor [weak self] in
                 self?.isAuthorized = granted
                 if granted {
                     self?.scheduleMorningDigest()
@@ -35,7 +35,7 @@ final class NotificationManager: ObservableObject {
     
     func checkAuthorization() {
         UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
-            Task { @MainActor in
+            Task { @MainActor [weak self] in
                 self?.isAuthorized = settings.authorizationStatus == .authorized
             }
         }
