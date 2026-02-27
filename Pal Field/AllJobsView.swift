@@ -138,7 +138,23 @@ struct JobRowCompact: View {
     let settings: Settings
     
     var body: some View {
-        HStack {
+        HStack(spacing: 12) {
+            // Onsite photo thumbnail
+            if let thumbnail = job.onsiteThumbnail {
+                Image(uiImage: thumbnail)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 44, height: 44)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            } else {
+                Image(systemName: job.isCloseoutComplete ? "checkmark.circle.fill" : "briefcase.fill")
+                    .font(.title3)
+                    .foregroundStyle(job.isCloseoutComplete ? .green : .secondary)
+                    .frame(width: 44, height: 44)
+                    .background(Color(.systemGray6))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(job.jobNumber)

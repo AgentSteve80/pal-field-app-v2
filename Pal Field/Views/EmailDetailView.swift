@@ -36,6 +36,9 @@ struct EmailDetailView: View {
     @State private var onsiteSent = false
     @State private var showingOnsiteOverride = false
 
+    // Onsite photo path (saved for job thumbnail)
+    @State private var savedOnsitePhotoPath: String?
+
     // Post-creation states
     @State private var createdJob: Job?
     @State private var showingNextActionSheet = false
@@ -554,6 +557,11 @@ struct EmailDetailView: View {
     private func saveJob() {
         let job = parsedData.toJob(settings: settings)
 
+        // Attach onsite photo (saved when onsite email was sent)
+        if let photoPath = savedOnsitePhotoPath ?? UserDefaults.standard.string(forKey: "onsitePhoto_\(email.id)") {
+            job.onsitePhotoPath = photoPath
+        }
+
         modelContext.insert(job)
 
         // If miles were entered, also create a MileageTrip for tax records
@@ -590,6 +598,21 @@ struct EmailDetailView: View {
         }
     }
 
+    // MARK: - Photo Storage
+
+    /// Save onsite photo to Documents directory, return path
+    static func saveOnsitePhoto(_ image: UIImage?) -> String? {
+        guard let image = image,
+              let data = image.jpegData(compressionQuality: 0.6) else { return nil }
+        let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("OnsitePhotos", isDirectory: true)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        let filename = "\(UUID().uuidString).jpg"
+        let url = dir.appendingPathComponent(filename)
+        try? data.write(to: url)
+        return url.path
+    }
+
     // MARK: - On-Site Email
 
     private func loadSelectedPhotos(_ items: [PhotosPickerItem]) async {
@@ -622,13 +645,20 @@ struct EmailDetailView: View {
                     images: imageData
                 )
 
+                // Save first photo as job thumbnail
+                let photoPath = Self.saveOnsitePhoto(capturedImages.first)
+
                 await MainActor.run {
                     isSendingOnsite = false
+                    savedOnsitePhotoPath = photoPath
                     capturedImages = []
                     selectedPhotoItems = []
                     onsiteSent = true
                     // Persist the sent status
                     UserDefaults.standard.set(true, forKey: onsiteSentKey)
+                    if let photoPath {
+                        UserDefaults.standard.set(photoPath, forKey: "onsitePhoto_\(email.id)")
+                    }
                     print("✅ On-site email sent with \(imageData.count) photos")
                 }
             } catch {

@@ -37,6 +37,9 @@ struct CloseoutView: View {
     @State private var showingSuccess = false
     @State private var showingError = false
     @State private var errorMessage = ""
+    @State private var showingPreview = false
+    @State private var previewSubject = ""
+    @State private var previewBody = ""
 
     // Add part sheet
     @State private var showingAddPart = false
@@ -62,8 +65,9 @@ struct CloseoutView: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Send") {
-                        sendCloseout()
+                    Button("Preview") {
+                        buildEmailContent()
+                        showingPreview = true
                     }
                     .disabled(isSending)
                 }
@@ -79,6 +83,16 @@ struct CloseoutView: View {
             }
             .sheet(isPresented: $showingCamera) {
                 CloseoutCameraView(images: $closeoutImages)
+            }
+            .sheet(isPresented: $showingPreview) {
+                CloseoutPreviewView(
+                    subject: previewSubject,
+                    body: previewBody,
+                    images: closeoutImages,
+                    isSending: $isSending,
+                    onSend: { sendCloseout() },
+                    onEdit: { showingPreview = false }
+                )
             }
             .alert("Closeout Sent", isPresented: $showingSuccess) {
                 Button("OK") { dismiss() }
@@ -382,10 +396,7 @@ struct CloseoutView: View {
         try? modelContext.save()
     }
 
-    private func sendCloseout() {
-        isSending = true
-
-        // Build email content
+    private func buildEmailContent() {
         let whipStatus = hasWhip ? "whip" : "no whip"
 
         var body = """
@@ -421,21 +432,39 @@ struct CloseoutView: View {
         if job.flatPanelWall > 0 { body += "Swfpp-\(job.flatPanelWall)\n" }
         if job.flatPanelRemote > 0 { body += "Rfpp-\(job.flatPanelRemote)\n" }
 
-        let subject = "Re: (P) \(job.lotNumber) \(job.subdivision) \(job.prospect)"
+        previewSubject = "Re: (P) \(job.lotNumber) \(job.subdivision) \(job.prospect)"
+        previewBody = body
+    }
+
+    private func sendCloseout() {
+        isSending = true
+
+        // Ensure email content is built
+        if previewSubject.isEmpty { buildEmailContent() }
 
         Task {
             do {
+                // Save closeout photos to disk
+                let photoPaths = Self.saveCloseoutPhotos(closeoutImages, jobId: job.id)
+
                 try await GmailService().sendCloseoutEmail(
-                    subject: subject,
-                    body: body,
+                    subject: previewSubject,
+                    body: previewBody,
                     images: closeoutImages,
                     threadId: job.sourceEmailThreadId,
                     inReplyTo: job.sourceEmailMessageId
                 )
 
                 await MainActor.run {
+                    // Save closeout data to job
                     saveToJob()
+                    job.closeoutEmailSubject = previewSubject
+                    job.closeoutEmailBody = previewBody
+                    job.closeoutPhotoPaths = photoPaths
+                    try? modelContext.save()
+
                     isSending = false
+                    showingPreview = false
                     showingSuccess = true
                 }
             } catch {
@@ -443,6 +472,115 @@ struct CloseoutView: View {
                     isSending = false
                     errorMessage = error.localizedDescription
                     showingError = true
+                }
+            }
+        }
+    }
+
+    /// Save closeout photos to Documents/CloseoutPhotos/<jobId>/
+    static func saveCloseoutPhotos(_ images: [UIImage], jobId: UUID) -> [String] {
+        let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("CloseoutPhotos", isDirectory: true)
+            .appendingPathComponent(jobId.uuidString, isDirectory: true)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+
+        var paths: [String] = []
+        for (index, image) in images.enumerated() {
+            guard let data = image.jpegData(compressionQuality: 0.7) else { continue }
+            let url = dir.appendingPathComponent("photo_\(index).jpg")
+            try? data.write(to: url)
+            paths.append(url.path)
+        }
+        return paths
+    }
+}
+
+// MARK: - Closeout Email Preview
+
+struct CloseoutPreviewView: View {
+    let subject: String
+    let body: String
+    let images: [UIImage]
+    @Binding var isSending: Bool
+    var onSend: () -> Void
+    var onEdit: () -> Void
+
+    @Environment(\.dismiss) private var dismiss
+
+    private let brandGreen = Color(red: 76/255, green: 140/255, blue: 43/255)
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    // Subject
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Subject")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text(subject)
+                            .font(.headline)
+                    }
+                    .padding(.horizontal)
+
+                    Divider()
+
+                    // Body
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Body")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text(body)
+                            .font(.body)
+                            .monospaced()
+                    }
+                    .padding(.horizontal)
+
+                    // Photos
+                    if !images.isEmpty {
+                        Divider()
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Attachments (\(images.count) photos)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .padding(.horizontal)
+
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 8) {
+                                    ForEach(Array(images.enumerated()), id: \.offset) { _, image in
+                                        Image(uiImage: image)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 120, height: 120)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    }
+                                }
+                                .padding(.horizontal)
+                            }
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
+            .navigationTitle("Preview Closeout Email")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Edit") { onEdit() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        onSend()
+                    } label: {
+                        if isSending {
+                            ProgressView()
+                        } else {
+                            Text("Send")
+                                .fontWeight(.bold)
+                        }
+                    }
+                    .disabled(isSending)
                 }
             }
         }
