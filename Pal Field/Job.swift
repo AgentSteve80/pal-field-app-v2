@@ -49,6 +49,9 @@ final class Job {
     var partsUsedJSON: String = ""     // JSON: [{"name":"Enp3050","qty":"1"},...]
     var ftdmCount: Int = 0             // Flextube to Dmark count
 
+    // Voice note
+    var voiceNotePath: String?          // Path to recorded voice note audio file
+
     // Gmail threading fields (for closeout email replies)
     var sourceEmailThreadId: String?    // Gmail thread ID from imported email
     var sourceEmailMessageId: String?   // RFC 2822 Message-ID header from imported email

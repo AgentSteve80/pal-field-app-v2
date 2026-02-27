@@ -36,6 +36,8 @@ struct AddJobView: View {
     @State private var calculatingMiles = false
     @State private var showGeocodeQuery = false
     @State private var geocodeQuery = ""
+    @State private var voiceNotePath: String?
+    @State private var jobNotes = ""
 
     var nextJobNumber: String {
         Job.generateNextJobNumber(existingJobs: allJobs)
@@ -105,6 +107,15 @@ struct AddJobView: View {
                     Stepper("Media Box (\(settings.priceForMediaBox(), specifier: "$%.0f") ea): \(mediaBox)", value: $mediaBox, in: 0...5)
                     Stepper("Dry Run (\(settings.priceForDryRun(), specifier: "$%.0f")): \(dryRun)", value: $dryRun, in: 0...3)
                     Stepper("Service Run 30min (\(settings.priceForServiceRun(), specifier: "$%.0f")): \(serviceRun)", value: $serviceRun, in: 0...10)
+                }
+
+                Section("Voice Note") {
+                    VoiceNoteView(voiceNotePath: $voiceNotePath, notes: $jobNotes)
+                    if !jobNotes.isEmpty {
+                        Text(jobNotes)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 Section("Mileage (For Tax Purposes)") {
@@ -180,6 +191,10 @@ struct AddJobView: View {
                         // Set owner info from current user
                         newJob.ownerEmail = GmailAuthManager.shared.userEmail
                         newJob.ownerName = settings.workerName
+                        newJob.voiceNotePath = voiceNotePath
+                        if !jobNotes.isEmpty {
+                            newJob.superNotes = jobNotes
+                        }
 
                         modelContext.insert(newJob)
 
