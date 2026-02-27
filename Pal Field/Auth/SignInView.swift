@@ -127,6 +127,9 @@ struct SignInView: View {
                 print("🔐 SignIn: signInWithPassword returned — status=\(signIn.status)")
                 print("🔐 SignIn: createdSessionId=\(signIn.createdSessionId ?? "nil")")
                 print("🔐 SignIn: firstFactorVerification=\(String(describing: signIn.firstFactorVerification))")
+                print("🔐 SignIn: secondFactorVerification=\(String(describing: signIn.secondFactorVerification))")
+                print("🔐 SignIn: supportedSecondFactors=\(String(describing: signIn.supportedSecondFactors))")
+                print("🔐 SignIn: identifier=\(signIn.identifier ?? "nil")")
                 print("🔐 SignIn: clerk.session=\(clerk.session?.id ?? "nil"), clerk.user=\(clerk.user?.id ?? "nil")")
                 await MainActor.run {
                     authManager.handleSessionChange()
