@@ -70,7 +70,7 @@ final class ClerkAuthManager: ObservableObject {
         // Try to get a fresh token from Clerk session using the Convex JWT template
         if let session = clerk.session {
             do {
-                let jwt = try await session.getToken(template: "convex")
+                let jwt = try await session.getToken(.init(template: "convex"))
                 if let jwt {
                     UserDefaults.standard.set(jwt, forKey: cachedTokenKey)
                 }
