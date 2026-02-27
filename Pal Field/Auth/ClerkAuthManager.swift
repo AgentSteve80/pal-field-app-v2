@@ -145,7 +145,7 @@ final class ClerkAuthManager: ObservableObject {
         handleSessionChange()
     }
 
-    private func handleSessionChange() {
+    func handleSessionChange() {
         let clerk = Clerk.shared
         
         if let user = clerk.user {

@@ -119,6 +119,9 @@ struct PalFieldApp: App {
 
                     // Start network monitoring
                     _ = NetworkMonitor.shared
+
+                    // Start Clerk auth observation
+                    ClerkAuthManager.shared.configure()
                 }
         }
         .modelContainer(container)

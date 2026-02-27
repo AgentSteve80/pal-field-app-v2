@@ -123,9 +123,9 @@ struct SignInView: View {
                 let clerk = Clerk.shared
                 _ = try await clerk.auth.signInWithPassword(identifier: email, password: password)
 
-                // If we get here without throwing, sign-in succeeded
-                // ClerkAuthManager will pick up the session change
+                // Sign-in succeeded — force an immediate session check
                 await MainActor.run {
+                    authManager.handleSessionChange()
                     isSigningIn = false
                     dismiss()
                 }
