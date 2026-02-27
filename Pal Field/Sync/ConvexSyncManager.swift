@@ -90,7 +90,7 @@ final class ConvexSyncManager: ObservableObject {
                let role = value["role"] as? String {
                 auth.updateCachedRole(role)
             }
-            print("✅ ConvexSync: User upserted")
+            print("✅ ConvexSync: User upserted — response: \(response)")
         } catch {
             print("⚠️ ConvexSync: User upsert failed: \(error)")
         }
