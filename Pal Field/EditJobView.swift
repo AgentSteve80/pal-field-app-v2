@@ -40,6 +40,7 @@ struct EditJobView: View {
     @State private var geocodeQuery: String
     @State private var showDeleteAlert = false
     @State private var showingCloseout = false
+    @State private var showingCloseoutEmail = false
     @State private var voiceNotePath: String?
     @State private var jobNotes: String
 
@@ -168,6 +169,31 @@ struct EditJobView: View {
                     }
                 }
 
+                // Closeout status
+                if job.isCloseoutComplete {
+                    Section("Closeout") {
+                        HStack {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(.green)
+                            Text("Completed")
+                            Spacer()
+                            if let date = job.closeoutDate {
+                                Text(date, style: .date)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+
+                        if job.closeoutEmailBody != nil {
+                            Button {
+                                showingCloseoutEmail = true
+                            } label: {
+                                Label("View Closeout Email", systemImage: "envelope.fill")
+                            }
+                        }
+                    }
+                }
+
                 Section {
                     HStack {
                         Spacer()
@@ -271,6 +297,9 @@ struct EditJobView: View {
             }
             .sheet(isPresented: $showingCloseout) {
                 CloseoutView(job: job)
+            }
+            .sheet(isPresented: $showingCloseoutEmail) {
+                CloseoutEmailViewer(job: job)
             }
         }
     }
