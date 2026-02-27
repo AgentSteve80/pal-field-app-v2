@@ -87,7 +87,7 @@ struct CloseoutView: View {
             .sheet(isPresented: $showingPreview) {
                 CloseoutPreviewView(
                     subject: previewSubject,
-                    body: previewBody,
+                    emailBody: previewBody,
                     images: closeoutImages,
                     isSending: $isSending,
                     onSend: { sendCloseout() },
@@ -499,7 +499,7 @@ struct CloseoutView: View {
 
 struct CloseoutPreviewView: View {
     let subject: String
-    let body: String
+    let emailBody: String
     let images: [UIImage]
     @Binding var isSending: Bool
     var onSend: () -> Void
@@ -530,7 +530,7 @@ struct CloseoutPreviewView: View {
                         Text("Body")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        Text(body)
+                        Text(emailBody)
                             .font(.body)
                             .monospaced()
                     }
