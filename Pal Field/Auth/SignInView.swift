@@ -120,26 +120,14 @@ struct SignInView: View {
 
         Task {
             do {
-                let signIn = try await SignIn.create(strategy: .identifier(email, password: password))
+                let clerk = Clerk.shared
+                let signIn = try await clerk.auth.signInWithPassword(identifier: email, password: password)
 
-                // Check if sign-in is complete
-                switch signIn.status {
-                case .complete:
-                    // Success — ClerkAuthManager will pick up the session change
-                    await MainActor.run {
-                        isSigningIn = false
-                        dismiss()
-                    }
-                case .needsFirstFactor, .needsSecondFactor:
-                    await MainActor.run {
-                        errorMessage = "Additional verification required. Please use SSO or contact admin."
-                        isSigningIn = false
-                    }
-                default:
-                    await MainActor.run {
-                        errorMessage = "Sign-in incomplete. Please try again."
-                        isSigningIn = false
-                    }
+                // If we get here without throwing, sign-in succeeded
+                // ClerkAuthManager will pick up the session change
+                await MainActor.run {
+                    isSigningIn = false
+                    dismiss()
                 }
             } catch {
                 await MainActor.run {
