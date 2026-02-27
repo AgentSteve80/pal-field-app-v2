@@ -48,10 +48,11 @@ final class ConvexSyncManager: ObservableObject {
 
     func configure(container: ModelContainer) {
         self.modelContainer = container
-        // Do an initial sync if online
-        if NetworkMonitor.shared.isConnected {
-            triggerSync()
-        }
+        // TODO: Enable sync once Convex auth provider is configured
+        // Convex OIDC provider needs Clerk JWT template with aud:"convex"
+        // if NetworkMonitor.shared.isConnected {
+        //     triggerSync()
+        // }
     }
 
     // MARK: - Public API

@@ -58,7 +58,6 @@ final class ClerkAuthManager: ObservableObject {
 
     /// Configure and start observing Clerk state — call once at app launch
     func configure() {
-        print("🔐 ClerkAuth: configure() called — starting observation")
         startObserving()
     }
 
@@ -148,8 +147,6 @@ final class ClerkAuthManager: ObservableObject {
 
     func handleSessionChange() {
         let clerk = Clerk.shared
-        print("🔐 ClerkAuth: polling — user=\(clerk.user?.id ?? "nil"), session=\(clerk.session?.id ?? "nil")")
-        
         if let user = clerk.user {
             let userId = user.id
             let email = user.primaryEmailAddress?.emailAddress
@@ -163,14 +160,14 @@ final class ClerkAuthManager: ObservableObject {
             isAuthenticated = true
             isLoading = false
 
-            // Only cache + sync if this is a new sign-in (not every poll)
+            // Only cache if this is a new sign-in (not every poll)
             if clerkUserId != userId || !isAuthenticated {
                 cacheAuth(userId: userId, email: email, displayName: displayName.isEmpty ? nil : displayName)
 
-                // Trigger Convex user upsert in background
-                Task {
-                    await ConvexSyncManager.shared.upsertUser()
-                }
+                // TODO: Enable once Convex auth provider is configured
+                // Task {
+                //     await ConvexSyncManager.shared.upsertUser()
+                // }
             }
         } else if clerk.session == nil && !hasCachedCredentials {
             isAuthenticated = false
