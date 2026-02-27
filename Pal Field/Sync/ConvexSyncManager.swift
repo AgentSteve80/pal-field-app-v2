@@ -48,11 +48,9 @@ final class ConvexSyncManager: ObservableObject {
 
     func configure(container: ModelContainer) {
         self.modelContainer = container
-        // TODO: Enable sync once Convex auth provider is configured
-        // Convex OIDC provider needs Clerk JWT template with aud:"convex"
-        // if NetworkMonitor.shared.isConnected {
-        //     triggerSync()
-        // }
+        if NetworkMonitor.shared.isConnected {
+            triggerSync()
+        }
     }
 
     // MARK: - Public API
@@ -86,7 +84,7 @@ final class ConvexSyncManager: ObservableObject {
         ]
 
         do {
-            let response = try await callMutation("users:upsert", args: args, token: token)
+            let response = try await callMutation("appSync:upsertUser", args: args, token: token)
             // If response includes a role, cache it
             if let value = response.value?.value as? [String: Any],
                let role = value["role"] as? String {
@@ -179,7 +177,7 @@ final class ConvexSyncManager: ObservableObject {
                 "updatedAt": job.updatedAt.timeIntervalSince1970 * 1000
             ]
 
-            let response = try await callMutation("jobs:upsertFromApp", args: args, token: token)
+            let response = try await callMutation("appSync:upsertJob", args: args, token: token)
             if let value = response.value?.value as? [String: Any],
                let convexId = value["_id"] as? String {
                 job.convexId = convexId
@@ -205,7 +203,7 @@ final class ConvexSyncManager: ObservableObject {
                 "updatedAt": invoice.updatedAt.timeIntervalSince1970 * 1000
             ]
 
-            let response = try await callMutation("invoices:upsertFromApp", args: args, token: token)
+            let response = try await callMutation("appSync:upsertInvoice", args: args, token: token)
             if let value = response.value?.value as? [String: Any],
                let convexId = value["_id"] as? String {
                 invoice.convexId = convexId
@@ -233,7 +231,7 @@ final class ConvexSyncManager: ObservableObject {
                 "updatedAt": expense.updatedAt.timeIntervalSince1970 * 1000
             ]
 
-            let response = try await callMutation("expenses:upsertFromApp", args: args, token: token)
+            let response = try await callMutation("appSync:upsertExpense", args: args, token: token)
             if let value = response.value?.value as? [String: Any],
                let convexId = value["_id"] as? String {
                 expense.convexId = convexId
@@ -262,7 +260,7 @@ final class ConvexSyncManager: ObservableObject {
                 args["endDate"] = endDate.timeIntervalSince1970 * 1000
             }
 
-            let response = try await callMutation("mileageTrips:upsertFromApp", args: args, token: token)
+            let response = try await callMutation("appSync:upsertMileageTrip", args: args, token: token)
             if let value = response.value?.value as? [String: Any],
                let convexId = value["_id"] as? String {
                 trip.convexId = convexId
@@ -289,7 +287,7 @@ final class ConvexSyncManager: ObservableObject {
                 "updatedAt": message.updatedAt.timeIntervalSince1970 * 1000
             ]
 
-            let response = try await callMutation("chatMessages:upsertFromApp", args: args, token: token)
+            let response = try await callMutation("appSync:upsertChatMessage", args: args, token: token)
             if let value = response.value?.value as? [String: Any],
                let convexId = value["_id"] as? String {
                 message.convexId = convexId
@@ -305,7 +303,7 @@ final class ConvexSyncManager: ObservableObject {
         let lastSync = lastSyncDate?.timeIntervalSince1970 ?? 0
         let args: [String: Any] = ["since": lastSync * 1000]
 
-        let response = try await callQuery("jobs:listForApp", args: args, token: token)
+        let response = try await callQuery("appSync:listJobsForApp", args: args, token: token)
         guard let jobs = response.value?.value as? [[String: Any]] else { return }
 
         let context = ModelContext(container)
@@ -339,7 +337,7 @@ final class ConvexSyncManager: ObservableObject {
         let lastSync = lastSyncDate?.timeIntervalSince1970 ?? 0
         let args: [String: Any] = ["since": lastSync * 1000]
 
-        let response = try await callQuery("chatMessages:listForApp", args: args, token: token)
+        let response = try await callQuery("appSync:listChatMessagesForApp", args: args, token: token)
         guard let messages = response.value?.value as? [[String: Any]] else { return }
 
         let context = ModelContext(container)

@@ -164,10 +164,9 @@ final class ClerkAuthManager: ObservableObject {
             if clerkUserId != userId || !isAuthenticated {
                 cacheAuth(userId: userId, email: email, displayName: displayName.isEmpty ? nil : displayName)
 
-                // TODO: Enable once Convex auth provider is configured
-                // Task {
-                //     await ConvexSyncManager.shared.upsertUser()
-                // }
+                Task {
+                    await ConvexSyncManager.shared.upsertUser()
+                }
             }
         } else if clerk.session == nil && !hasCachedCredentials {
             isAuthenticated = false
