@@ -163,11 +163,14 @@ final class ClerkAuthManager: ObservableObject {
             isAuthenticated = true
             isLoading = false
 
-            cacheAuth(userId: userId, email: email, displayName: displayName.isEmpty ? nil : displayName)
+            // Only cache + sync if this is a new sign-in (not every poll)
+            if clerkUserId != userId || !isAuthenticated {
+                cacheAuth(userId: userId, email: email, displayName: displayName.isEmpty ? nil : displayName)
 
-            // Trigger Convex user upsert in background
-            Task {
-                await ConvexSyncManager.shared.upsertUser()
+                // Trigger Convex user upsert in background
+                Task {
+                    await ConvexSyncManager.shared.upsertUser()
+                }
             }
         } else if clerk.session == nil && !hasCachedCredentials {
             isAuthenticated = false
