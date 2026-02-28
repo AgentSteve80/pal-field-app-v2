@@ -202,14 +202,16 @@ struct JobRouteMapView: View {
             return
         }
 
-        let geocoder = CLGeocoder()
         var geocoded: [JobAnnotation] = []
 
         for job in jobs {
             let query = "\(job.subdivision), \(job.address), Indianapolis, IN"
             do {
-                let placemarks = try await geocoder.geocodeAddressString(query)
-                if let coord = placemarks.first?.location?.coordinate {
+                let request = MKLocalSearch.Request()
+                request.naturalLanguageQuery = query
+                let search = MKLocalSearch(request: request)
+                let response = try await search.start()
+                if let coord = response.mapItems.first?.placemark.coordinate {
                     geocoded.append(JobAnnotation(id: job.id, job: job, coordinate: coord))
                 }
                 // Rate limit geocoding
@@ -310,8 +312,7 @@ struct JobRouteMapView: View {
     // MARK: - Helpers
 
     private func openInAppleMaps(annotation: JobAnnotation) {
-        let placemark = MKPlacemark(coordinate: annotation.coordinate)
-        let mapItem = MKMapItem(placemark: placemark)
+        let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: annotation.coordinate))
         mapItem.name = "Lot \(annotation.job.lotNumber) - \(annotation.job.subdivision)"
         mapItem.openInMaps(launchOptions: [
             MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving
