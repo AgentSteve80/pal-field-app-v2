@@ -177,6 +177,7 @@ final class ConvexSyncManager: ObservableObject {
                 "builderCompany": job.builderCompany,
                 "ownerEmail": job.ownerEmail,
                 "isCloseoutComplete": job.isCloseoutComplete,
+                "totalAmount": job.total(settings: Settings.shared),
                 "updatedAt": job.updatedAt.timeIntervalSince1970 * 1000
             ]
 
