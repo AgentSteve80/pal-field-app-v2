@@ -602,6 +602,14 @@ struct SettingsView: View {
                     Label("Sync Now", systemImage: "arrow.triangle.2.circlepath")
                 }
                 .disabled(syncManager.isSyncing || !networkMonitor.isConnected)
+
+                Button {
+                    forceFullSync()
+                } label: {
+                    Label("Force Full Upload", systemImage: "icloud.and.arrow.up")
+                }
+                .disabled(syncManager.isSyncing || !networkMonitor.isConnected)
+                .foregroundStyle(.orange)
             } else {
                 Text("Sign in to enable cloud sync")
                     .font(.caption)
@@ -782,6 +790,44 @@ struct SettingsView: View {
     }
 
     // MARK: - Helper Methods
+
+    @MainActor
+    private func forceFullSync() {
+        let context = modelContext
+        // Mark all jobs as pending sync
+        let jobDescriptor = FetchDescriptor<Job>()
+        if let allJobs = try? context.fetch(jobDescriptor) {
+            for job in allJobs {
+                job.syncStatusRaw = 1
+                job.updatedAt = Date()
+            }
+        }
+        // Mark all invoices as pending sync
+        let invoiceDescriptor = FetchDescriptor<Invoice>()
+        if let allInvoices = try? context.fetch(invoiceDescriptor) {
+            for inv in allInvoices {
+                inv.syncStatusRaw = 1
+            }
+        }
+        // Mark all expenses as pending sync
+        let expenseDescriptor = FetchDescriptor<Expense>()
+        if let allExpenses = try? context.fetch(expenseDescriptor) {
+            for exp in allExpenses {
+                exp.syncStatusRaw = 1
+            }
+        }
+        // Mark all mileage trips as pending sync
+        let mileageDescriptor = FetchDescriptor<MileageTrip>()
+        if let allTrips = try? context.fetch(mileageDescriptor) {
+            for trip in allTrips {
+                trip.syncStatusRaw = 1
+            }
+        }
+        try? context.save()
+        HapticManager.success()
+        // Trigger sync
+        syncManager.triggerSync()
+    }
 
     private func handleExportResult(_ result: Result<URL, Error>) {
         switch result {
