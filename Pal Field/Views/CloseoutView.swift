@@ -437,6 +437,8 @@ struct CloseoutView: View {
         job.closeoutParts = parts
         job.isCloseoutComplete = true
         job.closeoutDate = Date()
+        job.updatedAt = Date()
+        job.syncStatusRaw = 1  // Mark for re-sync
 
         try? modelContext.save()
     }

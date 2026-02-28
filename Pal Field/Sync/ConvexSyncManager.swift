@@ -406,24 +406,39 @@ final class ConvexSyncManager: ObservableObject {
 
     private func updateJobFromServer(_ job: Job, data: [String: Any]) {
         job.jobNumber = data["jobNumber"] as? String ?? job.jobNumber
-        if let ts = data["jobDate"] as? Double { job.jobDate = Date(timeIntervalSince1970: ts / 1000) }
+        if let dateStr = data["jobDate"] as? String {
+            // Convex stores jobDate as ISO date string "2026-02-28"
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            if let date = formatter.date(from: dateStr) { job.jobDate = date }
+        } else if let ts = data["jobDate"] as? Double {
+            job.jobDate = Date(timeIntervalSince1970: ts / 1000)
+        }
         job.lotNumber = data["lotNumber"] as? String ?? job.lotNumber
         job.address = data["address"] as? String ?? job.address
         job.subdivision = data["subdivision"] as? String ?? job.subdivision
-        job.prospect = data["prospect"] as? String ?? job.prospect
+        // Convex stores "prospect" as "prospectNumber"
+        job.prospect = data["prospectNumber"] as? String ?? data["prospect"] as? String ?? job.prospect
+        // Convex uses plural field names for counts
         job.wireRuns = data["wireRuns"] as? Int ?? job.wireRuns
-        job.enclosure = data["enclosure"] as? Int ?? job.enclosure
-        job.flatPanelStud = data["flatPanelStud"] as? Int ?? job.flatPanelStud
-        job.flatPanelWall = data["flatPanelWall"] as? Int ?? job.flatPanelWall
-        job.flatPanelRemote = data["flatPanelRemote"] as? Int ?? job.flatPanelRemote
+        job.enclosure = data["enclosures"] as? Int ?? data["enclosure"] as? Int ?? job.enclosure
+        job.flatPanelStud = data["flatPanelsStud"] as? Int ?? data["flatPanelStud"] as? Int ?? job.flatPanelStud
+        job.flatPanelWall = data["flatPanelsWall"] as? Int ?? data["flatPanelWall"] as? Int ?? job.flatPanelWall
+        job.flatPanelRemote = data["flatPanelsRemote"] as? Int ?? data["flatPanelRemote"] as? Int ?? job.flatPanelRemote
         job.flexTube = data["flexTube"] as? Int ?? job.flexTube
         job.mediaBox = data["mediaBox"] as? Int ?? job.mediaBox
-        job.dryRun = data["dryRun"] as? Int ?? job.dryRun
+        job.dryRun = data["dryRuns"] as? Int ?? data["dryRun"] as? Int ?? job.dryRun
         job.serviceRun = data["serviceRun"] as? Int ?? job.serviceRun
-        job.miles = data["miles"] as? Double ?? job.miles
+        // Convex stores miles as "mileageFromHome"
+        job.miles = data["mileageFromHome"] as? Double ?? data["miles"] as? Double ?? job.miles
         job.builderCompany = data["builderCompany"] as? String ?? job.builderCompany
         job.ownerEmail = data["ownerEmail"] as? String ?? job.ownerEmail
-        job.isCloseoutComplete = data["isCloseoutComplete"] as? Bool ?? job.isCloseoutComplete
+        // Convex stores status as string, map to bool
+        if let status = data["status"] as? String {
+            job.isCloseoutComplete = (status == "completed")
+        } else {
+            job.isCloseoutComplete = data["isCloseoutComplete"] as? Bool ?? job.isCloseoutComplete
+        }
         if let ts = data["updatedAt"] as? Double { job.updatedAt = Date(timeIntervalSince1970: ts / 1000) }
     }
 

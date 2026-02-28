@@ -249,6 +249,8 @@ struct EditJobView: View {
                         job.payTierValue = settings.payTier.rawValue
                         job.voiceNotePath = voiceNotePath
                         job.superNotes = jobNotes
+                        job.updatedAt = Date()
+                        job.syncStatusRaw = 1  // Mark for re-sync
 
                         // If miles were added (from 0 or increased), create a MileageTrip
                         if miles > originalMiles && originalMiles == 0 {
