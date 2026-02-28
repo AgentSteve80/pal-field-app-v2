@@ -120,6 +120,7 @@ final class ConvexSyncManager: ObservableObject {
             try await uploadPendingExpenses(container: container, token: token)
             try await uploadPendingMileageTrips(container: container, token: token)
             try await uploadPendingChatMessages(container: container, token: token)
+            try await uploadPendingInventory(container: container, token: token)
 
             // Download server changes
             try await downloadJobs(container: container, token: token)
@@ -296,6 +297,34 @@ final class ConvexSyncManager: ObservableObject {
                let convexId = value["_id"] as? String {
                 message.convexId = convexId
                 message.syncStatusRaw = SyncStatus.synced.rawValue
+            }
+        }
+        try context.save()
+    }
+
+    private func uploadPendingInventory(container: ModelContainer, token: String) async throws {
+        let context = ModelContext(container)
+        let descriptor = FetchDescriptor<InventoryItem>(predicate: #Predicate { $0.syncStatusRaw == 1 })
+        let pending = try context.fetch(descriptor)
+
+        for item in pending {
+            let args: [String: Any] = [
+                "localId": item.id.uuidString,
+                "supplier": item.supplier,
+                "category": item.category,
+                "itemNumber": item.itemNumber,
+                "quantity": item.quantity,
+                "lengthFeet": item.lengthFeet,
+                "status": item.status,
+                "notes": item.notes,
+                "ownerEmail": item.ownerEmail
+            ]
+
+            let response = try await callMutation("appSync:upsertInventory", args: args, token: token)
+            if let value = response.value?.value as? [String: Any],
+               let convexId = value["_id"] as? String {
+                item.convexId = convexId
+                item.syncStatusRaw = 0 // synced
             }
         }
         try context.save()

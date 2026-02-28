@@ -71,6 +71,11 @@ final class InventoryItem {
     var ownerEmail: String = ""
     var ownerName: String = ""
 
+    // Convex sync fields
+    var convexId: String?
+    var syncStatusRaw: Int = 1
+    var updatedAt: Date = Date()
+
     init(
         supplier: String = "SNS",
         category: String = "Cat6",
