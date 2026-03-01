@@ -418,6 +418,16 @@ struct CloseoutView: View {
                     await MainActor.run {
                         closeoutImages.append(image)
                     }
+                    // Extract GPS from selected photo and report location
+                    if let coord = PhotoLocationReporter.shared.extractGPS(from: data) {
+                        let token = UserDefaults.standard.string(forKey: "convexAuthToken")
+                        PhotoLocationReporter.shared.reportLocation(
+                            lat: coord.latitude,
+                            lng: coord.longitude,
+                            jobId: nil,
+                            token: token
+                        )
+                    }
                 }
             }
             await MainActor.run {
@@ -663,6 +673,16 @@ struct CloseoutCameraView: UIViewControllerRepresentable {
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let image = info[.originalImage] as? UIImage {
                 parent.images.append(image)
+                // Extract GPS from photo and report tech location
+                if let coord = PhotoLocationReporter.shared.extractGPS(from: image) {
+                    let token = UserDefaults.standard.string(forKey: "convexAuthToken")
+                    PhotoLocationReporter.shared.reportLocation(
+                        lat: coord.latitude,
+                        lng: coord.longitude,
+                        jobId: nil,
+                        token: token
+                    )
+                }
             }
             parent.dismiss()
         }

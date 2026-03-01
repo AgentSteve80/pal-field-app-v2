@@ -149,6 +149,28 @@ final class ConvexSyncManager: ObservableObject {
         isSyncing = false
     }
 
+    // MARK: - Geocoding
+
+    private func geocodeAddress(_ address: String) async -> (Double, Double)? {
+        guard !address.isEmpty else { return nil }
+        let query = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? address
+        guard let url = URL(string: "https://nominatim.openstreetmap.org/search?format=json&q=\(query)&limit=1") else { return nil }
+        var request = URLRequest(url: url)
+        request.setValue("PalFieldApp/1.0", forHTTPHeaderField: "User-Agent")
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
+            if let results = try JSONSerialization.jsonObject(with: data) as? [[String: Any]],
+               let first = results.first,
+               let latStr = first["lat"] as? String,
+               let lonStr = first["lon"] as? String,
+               let lat = Double(latStr),
+               let lon = Double(lonStr) {
+                return (lat, lon)
+            }
+        } catch {}
+        return nil
+    }
+
     // MARK: - Upload Methods
 
     private func uploadPendingJobs(container: ModelContainer, token: String) async throws {
@@ -157,7 +179,17 @@ final class ConvexSyncManager: ObservableObject {
         let pendingJobs = try context.fetch(descriptor)
 
         for job in pendingJobs {
-            let args: [String: Any] = [
+            // Geocode address if we don't have coordinates yet
+            var jobLat: Double?
+            var jobLng: Double?
+            if !job.address.isEmpty {
+                if let coords = await geocodeAddress(job.address) {
+                    jobLat = coords.0
+                    jobLng = coords.1
+                }
+            }
+
+            var args: [String: Any] = [
                 "localId": job.id.uuidString,
                 "jobNumber": job.jobNumber,
                 "jobDate": job.jobDate.timeIntervalSince1970 * 1000,
@@ -181,6 +213,8 @@ final class ConvexSyncManager: ObservableObject {
                 "totalAmount": job.total(settings: Settings.shared),
                 "updatedAt": job.updatedAt.timeIntervalSince1970 * 1000
             ]
+            if let lat = jobLat { args["lat"] = lat }
+            if let lng = jobLng { args["lng"] = lng }
 
             let response = try await callMutation("appSync:upsertJob", args: args, token: token)
             if let value = response.value?.value as? [String: Any],
