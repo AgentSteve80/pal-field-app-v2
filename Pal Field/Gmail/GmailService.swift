@@ -519,8 +519,47 @@ class GmailService {
         let userEmail = try await getUserEmail()
         let toAddress = "plvscheduling@pallowvoltage.com"
 
-        // Convert UIImages to Data
-        let imageDataArray = images.compactMap { $0.jpegData(compressionQuality: 0.7) }
+        // Scale down images to fit Gmail's 25MB limit
+        // Target ~1MB per image max, scale down large photos
+        let maxDimension: CGFloat = 1600  // Good quality for closeout documentation
+        let imageDataArray: [Data] = images.compactMap { image in
+            var img = image
+            // Scale down if larger than maxDimension
+            let maxSide = max(img.size.width, img.size.height)
+            if maxSide > maxDimension {
+                let scale = maxDimension / maxSide
+                let newSize = CGSize(width: img.size.width * scale, height: img.size.height * scale)
+                let renderer = UIGraphicsImageRenderer(size: newSize)
+                img = renderer.image { _ in
+                    img.draw(in: CGRect(origin: .zero, size: newSize))
+                }
+            }
+            return img.jpegData(compressionQuality: 0.6)
+        }
+
+        // Check total size — Gmail API limit is ~25MB (35MB base64)
+        let totalBytes = imageDataArray.reduce(0) { $0 + $1.count }
+        let totalMB = Double(totalBytes) / 1_000_000.0
+        print("📸 Closeout: \(imageDataArray.count) photos, \(String(format: "%.1f", totalMB))MB total")
+
+        // If still over 20MB, reduce quality further
+        var finalImages = imageDataArray
+        if totalMB > 20.0 {
+            print("⚠️ Over 20MB, reducing quality to 0.4")
+            finalImages = images.compactMap { image in
+                var img = image
+                let maxSide = max(img.size.width, img.size.height)
+                if maxSide > 1200 {
+                    let scale: CGFloat = 1200 / maxSide
+                    let newSize = CGSize(width: img.size.width * scale, height: img.size.height * scale)
+                    let renderer = UIGraphicsImageRenderer(size: newSize)
+                    img = renderer.image { _ in
+                        img.draw(in: CGRect(origin: .zero, size: newSize))
+                    }
+                }
+                return img.jpegData(compressionQuality: 0.4)
+            }
+        }
 
         // Build the MIME message
         let mimeMessage = buildCloseoutMimeMessage(
@@ -528,7 +567,7 @@ class GmailService {
             to: toAddress,
             subject: subject,
             body: body,
-            images: imageDataArray,
+            images: finalImages,
             inReplyTo: inReplyTo
         )
 
