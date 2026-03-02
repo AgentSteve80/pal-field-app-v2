@@ -230,6 +230,8 @@ class GmailService {
     /// Send a reply to an email with optional image attachments
     func sendReply(to originalEmail: EmailMessage, body: String, images: [Data] = []) async throws {
         let accessToken = try await authManager.getAccessToken()
+        
+        // Note: images should be pre-scaled by the caller
 
         // Get the user's email address
         let userEmail = try await getUserEmail()
@@ -240,6 +242,9 @@ class GmailService {
         // Create the reply subject
         let replySubject = originalEmail.subject.hasPrefix("Re:") ? originalEmail.subject : "Re: \(originalEmail.subject)"
 
+        // Use RFC 2822 Message-ID for proper threading (not Gmail API ID)
+        let replyToId = originalEmail.rfc2822MessageId ?? originalEmail.id
+        
         // Build the MIME message
         let mimeMessage = buildMimeMessage(
             from: userEmail,
@@ -248,7 +253,7 @@ class GmailService {
             body: body,
             images: images,
             threadId: originalEmail.threadId,
-            inReplyTo: originalEmail.id
+            inReplyTo: replyToId
         )
 
         // Encode to base64url
@@ -332,8 +337,10 @@ class GmailService {
         message += "From: \(from)\r\n"
         message += "To: \(to)\r\n"
         message += "Subject: \(subject)\r\n"
-        message += "In-Reply-To: <\(inReplyTo)>\r\n"
-        message += "References: <\(inReplyTo)>\r\n"
+        // Ensure proper angle bracket wrapping
+        let wrappedId = inReplyTo.hasPrefix("<") ? inReplyTo : "<\(inReplyTo)>"
+        message += "In-Reply-To: \(wrappedId)\r\n"
+        message += "References: \(wrappedId)\r\n"
         message += "MIME-Version: 1.0\r\n"
 
         if images.isEmpty {

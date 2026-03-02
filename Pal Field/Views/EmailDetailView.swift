@@ -633,9 +633,20 @@ struct EmailDetailView: View {
 
         Task {
             do {
-                // Convert images to JPEG data
-                let imageData = capturedImages.compactMap { image in
-                    image.jpegData(compressionQuality: 0.7)
+                // Scale down and convert images to JPEG data (Gmail 25MB limit)
+                let maxDimension: CGFloat = 1600
+                let imageData: [Data] = capturedImages.compactMap { image in
+                    var img = image
+                    let maxSide = max(img.size.width, img.size.height)
+                    if maxSide > maxDimension {
+                        let scale = maxDimension / maxSide
+                        let newSize = CGSize(width: img.size.width * scale, height: img.size.height * scale)
+                        let renderer = UIGraphicsImageRenderer(size: newSize)
+                        img = renderer.image { _ in
+                            img.draw(in: CGRect(origin: .zero, size: newSize))
+                        }
+                    }
+                    return img.jpegData(compressionQuality: 0.6)
                 }
 
                 // Send the reply
