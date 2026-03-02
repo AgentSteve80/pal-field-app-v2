@@ -273,10 +273,15 @@ struct PDFKitRepresentableView: UIViewRepresentable {
         pdfView.autoScales = true
         pdfView.displayMode = .singlePageContinuous
         pdfView.displayDirection = .vertical
+        pdfView.minScaleFactor = pdfView.scaleFactorForSizeToFit
+        pdfView.maxScaleFactor = 5.0
         return pdfView
     }
 
     func updateUIView(_ uiView: PDFView, context: Context) {
-        uiView.document = document
+        // Only set document if it changed — reassigning resets scroll position and zoom
+        if uiView.document !== document {
+            uiView.document = document
+        }
     }
 }
