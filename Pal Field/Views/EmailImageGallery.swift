@@ -240,24 +240,36 @@ struct FullScreenPDFView: View {
     @Environment(\.dismiss) private var dismiss
     let url: URL
     let filename: String
+    @State private var pdfDocument: PDFDocument?
 
     var body: some View {
         NavigationStack {
-            if let pdfDocument = PDFDocument(url: url) {
-                PDFKitRepresentableView(document: pdfDocument)
-                    .navigationTitle(filename)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button("Done") {
-                                dismiss()
-                            }
-                        }
-                    }
-            } else {
-                Text("Unable to load PDF")
-                    .foregroundStyle(.secondary)
+            Group {
+                if pdfDocument != nil {
+                    PDFKitRepresentableView(url: url)
+                        .ignoresSafeArea(edges: .bottom)
+                } else {
+                    ProgressView("Loading PDF...")
+                        .foregroundStyle(.secondary)
+                }
             }
+            .navigationTitle(filename)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    if let url = url as URL? {
+                        ShareLink(item: url)
+                    }
+                }
+            }
+        }
+        .onAppear {
+            pdfDocument = PDFDocument(url: url)
         }
     }
 }
@@ -265,23 +277,21 @@ struct FullScreenPDFView: View {
 // MARK: - PDFKit View Wrapper
 
 struct PDFKitRepresentableView: UIViewRepresentable {
-    let document: PDFDocument
+    let url: URL
 
     func makeUIView(context: Context) -> PDFView {
         let pdfView = PDFView()
-        pdfView.document = document
         pdfView.autoScales = true
         pdfView.displayMode = .singlePageContinuous
         pdfView.displayDirection = .vertical
-        pdfView.minScaleFactor = pdfView.scaleFactorForSizeToFit
-        pdfView.maxScaleFactor = 5.0
+        // Load document once
+        if let doc = PDFDocument(url: url) {
+            pdfView.document = doc
+        }
         return pdfView
     }
 
     func updateUIView(_ uiView: PDFView, context: Context) {
-        // Only set document if it changed — reassigning resets scroll position and zoom
-        if uiView.document !== document {
-            uiView.document = document
-        }
+        // Never reassign — this preserves scroll position and zoom level
     }
 }
