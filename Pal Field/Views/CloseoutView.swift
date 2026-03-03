@@ -25,6 +25,7 @@ struct CloseoutView: View {
     @State private var jobNotes: String = ""
     @State private var palNotes: String = ""
     @State private var superNotes: String = ""
+    @State private var notCompleted: String = ""
     @State private var parts: [CloseoutPart] = []
 
     // Photo state
@@ -181,6 +182,13 @@ struct CloseoutView: View {
                 Text("Super Notes")
                 TextField("Super approved onQ location...", text: $superNotes, axis: .vertical)
                     .lineLimit(2...4)
+            }
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Not Completed")
+                    .foregroundStyle(completionPercentage <= 99 ? .red : .primary)
+                TextField("List what didn\'t get finished...", text: $notCompleted, axis: .vertical)
+                    .lineLimit(2...5)
             }
         }
     }
@@ -407,6 +415,7 @@ struct CloseoutView: View {
         jobNotes = job.wapUpstairs  // Repurpose wapUpstairs as jobNotes
         palNotes = job.wapDownstairs  // Repurpose wapDownstairs as palNotes
         superNotes = job.superNotes
+        notCompleted = job.notCompleted
         parts = job.closeoutParts
     }
 
@@ -444,6 +453,7 @@ struct CloseoutView: View {
         job.wapUpstairs = jobNotes  // Store jobNotes in wapUpstairs field
         job.wapDownstairs = palNotes  // Store palNotes in wapDownstairs field
         job.superNotes = superNotes
+        job.notCompleted = notCompleted
         job.closeoutParts = parts
         job.isCloseoutComplete = true
         job.closeoutDate = Date()
@@ -476,6 +486,10 @@ struct CloseoutView: View {
             body += "\nSuper Noted: \(superNotes)"
         }
 
+        if !notCompleted.isEmpty {
+            body += "\nNot Completed: \(notCompleted)"
+        }
+
         body += "\n\nParts\n"
         for part in parts {
             body += "\(part.quantity) \(part.name)\n"
@@ -489,7 +503,12 @@ struct CloseoutView: View {
         if job.flatPanelWall > 0 { body += "Swfpp-\(job.flatPanelWall)\n" }
         if job.flatPanelRemote > 0 { body += "Rfpp-\(job.flatPanelRemote)\n" }
 
-        previewSubject = "Re: (P) \(job.lotNumber) \(job.subdivision) \(job.prospect)"
+        // Use original email subject for proper Gmail threading
+        if let originalSubject = job.sourceEmailSubject, !originalSubject.isEmpty {
+            previewSubject = originalSubject.hasPrefix("Re:") ? originalSubject : "Re: \(originalSubject)"
+        } else {
+            previewSubject = "Re: (P) \(job.lotNumber) \(job.subdivision) \(job.prospect)"
+        }
         previewBody = body
     }
 
@@ -518,6 +537,31 @@ struct CloseoutView: View {
                     job.closeoutEmailSubject = previewSubject
                     job.closeoutEmailBody = previewBody
                     job.closeoutPhotoPaths = photoPaths
+
+                    // Auto-create Return Job if completion <= 99%
+                    if completionPercentage <= 99 && !notCompleted.isEmpty {
+                        let returnJob = Job()
+                        returnJob.jobNumber = "RT-\(job.jobNumber)"
+                        returnJob.jobDate = Date()
+                        returnJob.lotNumber = job.lotNumber
+                        returnJob.address = job.address
+                        returnJob.subdivision = job.subdivision
+                        returnJob.prospect = job.prospect
+                        returnJob.builderCompany = job.builderCompany
+                        returnJob.ownerEmail = job.ownerEmail
+                        returnJob.ownerName = job.ownerName
+                        returnJob.isReturnJob = true
+                        returnJob.returnJobStatus = "pending"
+                        returnJob.parentJobId = job.id.uuidString
+                        returnJob.notCompleted = notCompleted
+                        returnJob.completionPercentage = completionPercentage
+                        // Copy threading info so return completion can reply to same thread
+                        returnJob.sourceEmailThreadId = job.sourceEmailThreadId
+                        returnJob.sourceEmailMessageId = job.sourceEmailMessageId
+                        returnJob.sourceEmailSubject = job.sourceEmailSubject
+                        modelContext.insert(returnJob)
+                    }
+
                     try? modelContext.save()
 
                     isSending = false
@@ -672,7 +716,8 @@ struct CloseoutCameraView: UIViewControllerRepresentable {
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let image = info[.originalImage] as? UIImage {
-                parent.images.append(image)
+                let fixedImage = image.fixedOrientation()
+                parent.images.append(fixedImage)
                 // Extract GPS from photo and report tech location
                 if let coord = PhotoLocationReporter.shared.extractGPS(from: image) {
                     let token = UserDefaults.standard.string(forKey: "convexAuthToken")

@@ -58,6 +58,7 @@ struct EmailDetailView: View {
         // Store Gmail threading info for closeout email replies
         parsed.sourceEmailThreadId = email.threadId
         parsed.sourceEmailMessageId = email.rfc2822MessageId
+        parsed.sourceEmailSubject = email.subject
         _parsedData = State(initialValue: parsed)
     }
 
@@ -713,7 +714,8 @@ struct OnsiteCameraView: UIViewControllerRepresentable {
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let image = info[.originalImage] as? UIImage {
-                parent.images.append(image)
+                let fixedImage = image.fixedOrientation()
+                parent.images.append(fixedImage)
                 captureCount += 1
             }
 

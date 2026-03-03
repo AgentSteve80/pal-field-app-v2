@@ -91,6 +91,7 @@ struct ParsedJobData {
     // Gmail threading info (set when parsed from an email)
     var sourceEmailThreadId: String?
     var sourceEmailMessageId: String?
+    var sourceEmailSubject: String?
 
     // Convert to Job model
     func toJob(settings: Settings) -> Job {
@@ -122,6 +123,7 @@ struct ParsedJobData {
         // Set Gmail threading info for closeout email replies
         job.sourceEmailThreadId = sourceEmailThreadId
         job.sourceEmailMessageId = sourceEmailMessageId
+        job.sourceEmailSubject = sourceEmailSubject
         return job
     }
 }

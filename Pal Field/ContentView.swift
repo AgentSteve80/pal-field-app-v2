@@ -17,6 +17,7 @@ struct ContentView: View {
     // Brand colors matching splash screen
     private let brandGreen = Color(red: 76/255, green: 140/255, blue: 43/255)
     @Query(sort: \Job.jobDate, order: .reverse) private var allJobs: [Job]
+    @Query(filter: #Predicate<Job> { $0.isReturnJob == true && $0.returnJobStatus == "pending" }) private var pendingReturnJobs: [Job]
     @Query private var allInvoices: [Invoice]
     @Query private var allExpenses: [Expense]
     @Query private var cachedEmails: [CachedEmail]
@@ -378,6 +379,7 @@ struct ContentView: View {
             gridNavButton(icon: "receipt.fill", title: "Expenses", color: .red, destination: ExpensesView())
             gridNavButton(icon: "map.fill", title: "Route", color: .teal, destination: JobRouteMapView())
             gridNavButton(icon: "list.bullet.rectangle", title: "All Jobs", color: .purple, destination: AllJobsView())
+            returnJobsButton
             gridNavButton(icon: "building.2.fill", title: "Builders", color: .indigo, destination: BuilderInfoView())
 
             // Admin tabs - visible when admin mode is enabled (local role OR Convex role)
@@ -432,6 +434,45 @@ struct ContentView: View {
     }
 
     @ViewBuilder
+    private var returnJobsButton: some View {
+        NavigationLink {
+            ReturnJobsView()
+        } label: {
+            ZStack(alignment: .topTrailing) {
+                VStack(spacing: 8) {
+                    Image(systemName: "arrow.uturn.backward.circle.fill")
+                        .font(.system(size: 32))
+                        .foregroundStyle(.white)
+
+                    Text("Return Jobs")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.white)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 100)
+                .background(Color.red.gradient)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+
+                // Notification badge
+                if pendingReturnJobs.count > 0 {
+                    Text("\(pendingReturnJobs.count)")
+                        .font(.caption2.weight(.bold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(.red)
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(.black, lineWidth: 2)
+                        )
+                        .offset(x: -4, y: 4)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
     private func gridNavButton<Destination: View>(icon: String, title: String, color: Color, destination: Destination) -> some View {
         NavigationLink {
             destination

@@ -629,8 +629,10 @@ class GmailService {
         message += "To: \(to)\r\n"
         message += "Subject: \(subject)\r\n"
         if let inReplyTo = inReplyTo {
-            message += "In-Reply-To: \(inReplyTo)\r\n"
-            message += "References: \(inReplyTo)\r\n"
+            // Ensure proper angle bracket wrapping per RFC 2822
+            let wrappedId = inReplyTo.hasPrefix("<") ? inReplyTo : "<\(inReplyTo)>"
+            message += "In-Reply-To: \(wrappedId)\r\n"
+            message += "References: \(wrappedId)\r\n"
         }
         message += "MIME-Version: 1.0\r\n"
 

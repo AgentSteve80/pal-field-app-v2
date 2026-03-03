@@ -64,6 +64,16 @@ final class Job {
     // Gmail threading fields (for closeout email replies)
     var sourceEmailThreadId: String?    // Gmail thread ID from imported email
     var sourceEmailMessageId: String?   // RFC 2822 Message-ID header from imported email
+    var sourceEmailSubject: String?     // Original email subject for proper threading
+
+    // Return Job fields
+    var notCompleted: String = ""       // What didn't get finished during closeout
+    var isReturnJob: Bool = false       // Is this a return job entry
+    var returnJobStatus: String = ""    // "pending" or "completed"
+    var parentJobId: String?            // Links return job → original job UUID string
+    var returnCompletionNotes: String = ""
+    var returnCompletionPhotoPathsJSON: String?  // JSON array of photo paths
+    var returnCompletionDate: Date?
 
     // Convex sync fields
     var convexId: String?
@@ -165,6 +175,25 @@ final class Job {
             if let data = try? JSONEncoder().encode(newValue),
                let json = String(data: data, encoding: .utf8) {
                 closeoutPhotoPathsJSON = json
+            }
+        }
+    }
+
+    // MARK: - Return Completion Photo Paths
+
+    var returnCompletionPhotoPaths: [String] {
+        get {
+            guard let json = returnCompletionPhotoPathsJSON,
+                  let data = json.data(using: .utf8),
+                  let paths = try? JSONDecoder().decode([String].self, from: data) else {
+                return []
+            }
+            return paths
+        }
+        set {
+            if let data = try? JSONEncoder().encode(newValue),
+               let json = String(data: data, encoding: .utf8) {
+                returnCompletionPhotoPathsJSON = json
             }
         }
     }
