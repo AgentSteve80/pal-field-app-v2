@@ -19,6 +19,7 @@ struct InventoryView: View {
     @State private var isSyncing = false
     @State private var showSyncSuccess = false
     @State private var syncError: String?
+    @ObservedObject private var syncManager = ConvexSyncManager.shared
 
     // Filter by current user (empty ownerEmail = legacy data, treat as current user's)
     private var currentUserEmail: String {
@@ -110,10 +111,15 @@ struct InventoryView: View {
                     ShareSheet(items: [url])
                 }
             }
-            .alert("Inventory Sent!", isPresented: $showSyncSuccess) {
+            .alert("Inventory Sent! ✅", isPresented: $showSyncSuccess) {
                 Button("OK") { }
             } message: {
-                Text("\(allItems.count) items marked for sync to Pal Web. They\'ll upload on the next sync cycle (usually within seconds).")
+                Text("\(allItems.count) items synced to Pal Web.")
+            }
+            .alert("Sync Issue", isPresented: Binding(get: { syncError != nil }, set: { if !$0 { syncError = nil } })) {
+                Button("OK") { syncError = nil }
+            } message: {
+                Text(syncError ?? "Unknown error")
             }
         }
     }
@@ -187,21 +193,71 @@ struct InventoryView: View {
 
     private func sendInventory() {
         isSyncing = true
+        syncError = nil
+
+        let itemCount = allItems.count
 
         // Mark all items as needing sync
         for item in allItems {
             item.syncStatusRaw = 1  // pending sync
             item.updatedAt = Date()
         }
-        try? modelContext.save()
-
-        // Trigger immediate Convex sync
-        ConvexSyncManager.shared.triggerSync()
-
-        // Show success after a brief delay to let sync start
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        do {
+            try modelContext.save()
+            print("📦 Inventory: Marked \(itemCount) items for sync")
+        } catch {
+            print("❌ Inventory: Failed to save: \(error)")
+            syncError = "Failed to save: \(error.localizedDescription)"
             isSyncing = false
-            showSyncSuccess = true
+            return
+        }
+
+        // Check auth before triggering
+        Task {
+            let token = await ClerkAuthManager.shared.getToken()
+            await MainActor.run {
+                if token == nil {
+                    print("❌ Inventory: No auth token — not signed in")
+                    syncError = "Not signed in. Sign in first, then try again."
+                    isSyncing = false
+                    return
+                }
+
+                print("📦 Inventory: Auth OK, triggering sync in 0.5s...")
+                // Brief delay to ensure SwiftData save propagates to shared store
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    ConvexSyncManager.shared.triggerSync()
+                }
+
+                // Poll for sync completion
+                pollSyncCompletion(itemCount: itemCount)
+            }
+        }
+    }
+
+    private func pollSyncCompletion(itemCount: Int, attempt: Int = 0) {
+        // Check if sync is done after a delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            let stillPending = allItems.filter { $0.syncStatusRaw == 1 }.count
+            print("📦 Inventory: Poll \(attempt + 1) — \(stillPending) still pending")
+
+            if stillPending == 0 {
+                // All synced!
+                isSyncing = false
+                showSyncSuccess = true
+            } else if attempt < 10 {
+                // Keep polling (up to 10 seconds)
+                pollSyncCompletion(itemCount: itemCount, attempt: attempt + 1)
+            } else {
+                // Timeout — some didn't sync
+                isSyncing = false
+                let synced = itemCount - stillPending
+                if synced > 0 {
+                    syncError = "\(synced)/\(itemCount) items synced. \(stillPending) failed — check your connection and try again."
+                } else {
+                    syncError = "Sync timed out. Check your internet connection and try again."
+                }
+            }
         }
     }
 
