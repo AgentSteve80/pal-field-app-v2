@@ -650,6 +650,12 @@ struct EmailDetailView: View {
                     return img.jpegData(compressionQuality: 0.6)
                 }
 
+                // Debug: log onsite threading
+                print("📧 Onsite threading debug:")
+                print("  threadId: \(email.threadId)")
+                print("  rfc2822MessageId: \(email.rfc2822MessageId ?? "nil")")
+                print("  subject: \(email.subject)")
+
                 // Send the reply
                 try await gmailService.sendReply(
                     to: email,

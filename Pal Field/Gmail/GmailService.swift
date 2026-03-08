@@ -228,7 +228,8 @@ class GmailService {
     }
 
     /// Send a reply to an email with optional image attachments
-    func sendReply(to originalEmail: EmailMessage, body: String, images: [Data] = []) async throws {
+    @discardableResult
+    func sendReply(to originalEmail: EmailMessage, body: String, images: [Data] = []) async throws -> String? {
         let accessToken = try await authManager.getAccessToken()
         
         // Note: images should be pre-scaled by the caller
@@ -293,7 +294,14 @@ class GmailService {
             throw GmailError.apiError("Failed to send email: HTTP \(httpResponse.statusCode) - \(errorMessage)")
         }
 
+        // Parse response to get the sent message ID
+        if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let sentId = json["id"] as? String {
+            print("✅ Reply sent successfully! Message ID: \(sentId)")
+            return sentId
+        }
         print("✅ Reply sent successfully!")
+        return nil
     }
 
     /// Get the authenticated user's email address
@@ -615,7 +623,13 @@ class GmailService {
             throw GmailError.apiError("Failed to send closeout: HTTP \(httpResponse.statusCode) - \(errorMessage)")
         }
 
-        print("✅ Closeout sent successfully!")
+        // Parse response for sent message ID
+        if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let sentId = json["id"] as? String {
+            print("✅ Closeout sent successfully! Message ID: \(sentId)")
+        } else {
+            print("✅ Closeout sent successfully!")
+        }
     }
 
     /// Build MIME message for closeout (reply if inReplyTo provided, otherwise new email)

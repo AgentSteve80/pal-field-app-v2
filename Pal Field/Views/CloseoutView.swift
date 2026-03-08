@@ -518,6 +518,13 @@ struct CloseoutView: View {
         // Ensure email content is built
         if previewSubject.isEmpty { buildEmailContent() }
 
+        // Debug: log threading info
+        print("📧 Closeout threading debug:")
+        print("  threadId: \(job.sourceEmailThreadId ?? "nil")")
+        print("  messageId: \(job.sourceEmailMessageId ?? "nil")")
+        print("  sourceSubject: \(job.sourceEmailSubject ?? "nil")")
+        print("  previewSubject: \(previewSubject)")
+
         Task {
             do {
                 // Save closeout photos to disk
