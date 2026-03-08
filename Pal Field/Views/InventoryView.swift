@@ -16,6 +16,9 @@ struct InventoryView: View {
     @State private var showingAddSheet = false
     @State private var showingExportSheet = false
     @State private var exportURL: URL?
+    @State private var isSyncing = false
+    @State private var showSyncSuccess = false
+    @State private var syncError: String?
 
     // Filter by current user (empty ownerEmail = legacy data, treat as current user's)
     private var currentUserEmail: String {
@@ -72,12 +75,28 @@ struct InventoryView: View {
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        generatePDF()
-                    } label: {
-                        Image(systemName: "square.and.arrow.up")
+                    HStack(spacing: 16) {
+                        // Send to Pal Web button
+                        Button {
+                            sendInventory()
+                        } label: {
+                            if isSyncing {
+                                ProgressView()
+                                    .controlSize(.small)
+                            } else {
+                                Image(systemName: "arrow.up.circle.fill")
+                            }
+                        }
+                        .disabled(allItems.isEmpty || isSyncing)
+
+                        // Share/Export PDF button
+                        Button {
+                            generatePDF()
+                        } label: {
+                            Image(systemName: "square.and.arrow.up")
+                        }
+                        .disabled(allItems.isEmpty)
                     }
-                    .disabled(allItems.isEmpty)
                 }
             }
             .sheet(isPresented: $showingAddSheet) {
@@ -90,6 +109,11 @@ struct InventoryView: View {
                 if let url = exportURL {
                     ShareSheet(items: [url])
                 }
+            }
+            .alert("Inventory Sent!", isPresented: $showSyncSuccess) {
+                Button("OK") { }
+            } message: {
+                Text("\(allItems.count) items marked for sync to Pal Web. They\'ll upload on the next sync cycle (usually within seconds).")
             }
         }
     }
@@ -159,6 +183,26 @@ struct InventoryView: View {
     private func deleteItem(_ item: InventoryItem) {
         modelContext.delete(item)
         try? modelContext.save()
+    }
+
+    private func sendInventory() {
+        isSyncing = true
+
+        // Mark all items as needing sync
+        for item in allItems {
+            item.syncStatusRaw = 1  // pending sync
+            item.updatedAt = Date()
+        }
+        try? modelContext.save()
+
+        // Trigger immediate Convex sync
+        ConvexSyncManager.shared.triggerSync()
+
+        // Show success after a brief delay to let sync start
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            isSyncing = false
+            showSyncSuccess = true
+        }
     }
 
     private func generatePDF() {
