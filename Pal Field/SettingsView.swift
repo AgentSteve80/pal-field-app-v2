@@ -75,6 +75,7 @@ struct SettingsView: View {
                 personalInfoSection
                 payTierSection
                 appearanceSection
+                dataManagementSection
                 notificationsSection
                 gmailSection
                 iCloudBackupSection
@@ -274,9 +275,40 @@ struct SettingsView: View {
         }
     }
 
+    @State private var showClearPartsAlert = false
+
     private var appearanceSection: some View {
         Section("Appearance") {
             Toggle("Dark Mode", isOn: $settings.darkMode)
+        }
+    }
+
+    private var dataManagementSection: some View {
+        Section("Data") {
+            Button(role: .destructive) {
+                showClearPartsAlert = true
+            } label: {
+                HStack {
+                    Label("Clear Recent Parts", systemImage: "clock.arrow.circlepath")
+                    Spacer()
+                    let count = (UserDefaults.standard.dictionary(forKey: "closeoutPartsFrequency") as? [String: Int])?.count ?? 0
+                    if count > 0 {
+                        Text("\(count) saved")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .alert("Clear Recent Parts?", isPresented: $showClearPartsAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Clear", role: .destructive) {
+                    UserDefaults.standard.removeObject(forKey: "closeoutPartsFrequency")
+                    UserDefaults.standard.removeObject(forKey: "closeoutPartsLastQty")
+                    HapticManager.success()
+                }
+            } message: {
+                Text("This will clear all saved recent parts from the closeout quick-pick list. You'll build a new list as you use parts.")
+            }
         }
     }
 
