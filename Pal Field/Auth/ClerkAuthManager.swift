@@ -67,31 +67,40 @@ final class ClerkAuthManager: ObservableObject {
     func getToken() async -> String? {
         let clerk = Clerk.shared
 
-        // Try to get a fresh token from Clerk session using the Convex JWT template
+        // Method 1: Use clerk.auth.getToken() (recommended by Clerk docs)
+        do {
+            let token = try await clerk.auth.getToken()
+            if let token {
+                print("✅ ClerkAuth: Got token via clerk.auth.getToken()")
+                UserDefaults.standard.set(token, forKey: cachedTokenKey)
+                return token
+            }
+        } catch {
+            print("⚠️ ClerkAuth: clerk.auth.getToken() failed: \(error)")
+        }
+
+        // Method 2: Try session.getToken with Convex template
         if let session = clerk.session {
             do {
                 let jwt = try await session.getToken(.init(template: "convex"))
                 if let jwt {
-                    print("✅ ClerkAuth: Got fresh JWT (\(jwt.prefix(20))...)")
+                    print("✅ ClerkAuth: Got JWT via session.getToken(convex)")
                     UserDefaults.standard.set(jwt, forKey: cachedTokenKey)
                     return jwt
-                } else {
-                    print("⚠️ ClerkAuth: session.getToken returned nil")
                 }
             } catch {
-                print("⚠️ ClerkAuth: Failed to get fresh token: \(error)")
-                // Session might be expired — try signing in again
-                print("⚠️ ClerkAuth: Session may be expired. User should sign out and back in.")
+                print("⚠️ ClerkAuth: session.getToken(convex) failed: \(error)")
             }
         } else {
             print("⚠️ ClerkAuth: No active Clerk session")
         }
 
-        // Fall back to cached token (may be expired — log warning)
+        // Method 3: Fall back to cached token (may be expired)
         if let cached = UserDefaults.standard.string(forKey: cachedTokenKey) {
             print("⚠️ ClerkAuth: Using CACHED token (may be expired)")
             return cached
         }
+        print("❌ ClerkAuth: No token available at all")
         return nil
     }
 
@@ -186,6 +195,20 @@ final class ClerkAuthManager: ObservableObject {
         } else if clerk.session == nil && !hasCachedCredentials {
             isAuthenticated = false
             isLoading = false
+        }
+    }
+
+    /// Force authenticated state after a successful sign-in
+    /// when clerk.user is nil but signInWithPassword succeeded
+    func forceAuthenticated() {
+        // Re-read from cache (cacheAuth was called during sign-in)
+        if let userId = UserDefaults.standard.string(forKey: cachedUserIdKey) {
+            clerkUserId = userId
+            clerkEmail = UserDefaults.standard.string(forKey: cachedEmailKey)
+            clerkDisplayName = UserDefaults.standard.string(forKey: cachedDisplayNameKey)
+            isAuthenticated = true
+            isLoading = false
+            print("🔐 ClerkAuth: Forced authenticated from cache — userId=\(userId)")
         }
     }
 

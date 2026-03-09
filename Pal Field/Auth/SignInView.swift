@@ -122,31 +122,62 @@ struct SignInView: View {
             do {
                 let clerk = Clerk.shared
                 print("🔐 SignIn: Attempting sign-in for \(email)...")
-                let result = try await clerk.auth.signInWithPassword(identifier: email, password: password)
-                print("🔐 SignIn: Result status = \(result.status)")
+                let signInResult = try await clerk.auth.signInWithPassword(identifier: email, password: password)
+                print("🔐 SignIn: Result status = \(signInResult.status)")
 
-                // Wait a moment for Clerk SDK to update internal state
-                try? await Task.sleep(nanoseconds: 500_000_000) // 0.5s
-
-                // Check if session is now active
-                let hasSession = clerk.session != nil
-                let hasUser = clerk.user != nil
-                print("🔐 SignIn: Post-login — session=\(hasSession), user=\(hasUser)")
-                if let user = clerk.user {
-                    print("🔐 SignIn: User = \(user.id), email = \(user.primaryEmailAddress?.emailAddress ?? "none")")
-                }
-
-                // Force update auth state
-                await MainActor.run {
-                    authManager.handleSessionChange()
-                    print("🔐 SignIn: isAuthenticated = \(authManager.isAuthenticated)")
-                    isSigningIn = false
-
-                    if authManager.isAuthenticated {
-                        dismiss()
+                if signInResult.status == .complete {
+                    print("🔐 SignIn: Status complete!")
+                    
+                    // Try to activate the session explicitly
+                    if let sessionId = signInResult.createdSessionId {
+                        print("🔐 SignIn: Activating created session \(sessionId)...")
+                        try await clerk.auth.setActive(sessionId: sessionId)
                     } else {
-                        // Auth didn't stick — show helpful error
-                        errorMessage = "Signed in but session not detected. Try closing and reopening the app."
+                        // No createdSessionId — try getting it from sessions list
+                        let sessions = clerk.auth.sessions
+                        print("🔐 SignIn: No createdSessionId. Available sessions: \(sessions.count)")
+                        if let firstSession = sessions.first {
+                            print("🔐 SignIn: Activating first session \(firstSession.id)...")
+                            try await clerk.auth.setActive(sessionId: firstSession.id)
+                        }
+                    }
+
+                    // Wait for SDK state to propagate
+                    try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5s
+                    
+                    // Check state
+                    let hasSession = clerk.session != nil
+                    let hasUser = clerk.user != nil
+                    let sessions = clerk.auth.sessions
+                    print("🔐 SignIn: session=\(hasSession), user=\(hasUser), sessions=\(sessions.count)")
+                    
+                    // Try getting a Convex JWT to verify
+                    if let session = clerk.session {
+                        let convexToken = try? await session.getToken(.init(template: "convex"))
+                        print("🔐 SignIn: Convex JWT = \(convexToken != nil)")
+                    }
+                    
+                    await MainActor.run {
+                        // Force auth state update
+                        if hasUser {
+                            authManager.handleSessionChange()
+                        } else {
+                            // User is nil but sign-in succeeded — cache what we know and force auth
+                            print("🔐 SignIn: clerk.user is nil, caching from sign-in email")
+                            // We at least know the email they signed in with
+                            UserDefaults.standard.set(email, forKey: "clerkCachedEmail")
+                            UserDefaults.standard.set(signInResult.id ?? "unknown", forKey: "clerkCachedUserId")
+                            authManager.forceAuthenticated()
+                        }
+                        
+                        isSigningIn = false
+                        dismiss()
+                    }
+                } else {
+                    await MainActor.run {
+                        print("🔐 SignIn: Incomplete — status = \(signInResult.status)")
+                        errorMessage = "Sign-in incomplete (status: \(signInResult.status)). Please try again."
+                        isSigningIn = false
                     }
                 }
             } catch {
