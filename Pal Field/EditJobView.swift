@@ -102,9 +102,11 @@ struct EditJobView: View {
         return tempJob.total(settings: settings)
     }
 
-    private var recentParts: [String] {
-        let dict = UserDefaults.standard.dictionary(forKey: "closeoutPartsFrequency") as? [String: Int] ?? [:]
-        return dict.sorted { $0.value > $1.value }.map { $0.key }
+    /// Recent parts with saved quantities — returns [(name, qty, frequency)]
+    private var recentPartsWithQty: [(name: String, qty: String, freq: Int)] {
+        let freqDict = UserDefaults.standard.dictionary(forKey: "closeoutPartsFrequency") as? [String: Int] ?? [:]
+        let qtyDict = UserDefaults.standard.dictionary(forKey: "closeoutPartsLastQty") as? [String: String] ?? [:]
+        return freqDict.sorted { $0.value > $1.value }.map { (name: $0.key, qty: qtyDict[$0.key] ?? "1", freq: $0.value) }
     }
 
     // MARK: - Init
@@ -633,24 +635,26 @@ struct EditJobView: View {
     private var addPartSheet: some View {
         NavigationStack {
             Form {
-                if !recentParts.isEmpty {
+                if !recentPartsWithQty.isEmpty {
                     Section("Recent Parts") {
-                        let columns = [GridItem(.adaptive(minimum: 100))]
-                        LazyVGrid(columns: columns, spacing: 8) {
-                            ForEach(recentParts.prefix(12), id: \.self) { partName in
-                                Button {
-                                    addPart(partName)
-                                    showingAddPart = false
-                                } label: {
-                                    Text(partName)
-                                        .font(.caption)
-                                        .fontWeight(.medium)
-                                        .padding(.horizontal, 10)
-                                        .padding(.vertical, 6)
-                                        .frame(maxWidth: .infinity)
-                                        .background(brandGreen.opacity(0.15))
+                        ForEach(recentPartsWithQty.prefix(12), id: \.name) { part in
+                            Button {
+                                addPart(part.name, qty: part.qty)
+                                showingAddPart = false
+                            } label: {
+                                HStack {
+                                    Text(part.qty)
+                                        .font(.subheadline.bold())
+                                        .foregroundStyle(.white)
+                                        .frame(width: 28, height: 28)
+                                        .background(brandGreen)
+                                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                                    Text(part.name)
+                                        .font(.subheadline)
+                                        .foregroundStyle(.primary)
+                                    Spacer()
+                                    Image(systemName: "plus.circle.fill")
                                         .foregroundStyle(brandGreen)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
                                 }
                             }
                         }
@@ -820,13 +824,18 @@ struct EditJobView: View {
     private func addPart(_ name: String, qty: String = "1") {
         let part = CloseoutPart(name: name, quantity: qty)
         parts.append(part)
-        trackPartUsage(name)
+        trackPartUsage(name, qty: qty)
     }
 
-    private func trackPartUsage(_ name: String) {
-        var dict = UserDefaults.standard.dictionary(forKey: "closeoutPartsFrequency") as? [String: Int] ?? [:]
-        dict[name, default: 0] += 1
-        UserDefaults.standard.set(dict, forKey: "closeoutPartsFrequency")
+    private func trackPartUsage(_ name: String, qty: String) {
+        var freqDict = UserDefaults.standard.dictionary(forKey: "closeoutPartsFrequency") as? [String: Int] ?? [:]
+        freqDict[name, default: 0] += 1
+        UserDefaults.standard.set(freqDict, forKey: "closeoutPartsFrequency")
+
+        // Also save the last-used quantity for this part
+        var qtyDict = UserDefaults.standard.dictionary(forKey: "closeoutPartsLastQty") as? [String: String] ?? [:]
+        qtyDict[name] = qty
+        UserDefaults.standard.set(qtyDict, forKey: "closeoutPartsLastQty")
     }
 
     private func loadSelectedPhotos(_ items: [PhotosPickerItem]) {
@@ -834,8 +843,9 @@ struct EditJobView: View {
             for item in items {
                 if let data = try? await item.loadTransferable(type: Data.self),
                    let image = UIImage(data: data) {
+                    let fixedImage = image.fixedOrientation()
                     await MainActor.run {
-                        closeoutImages.append(image)
+                        closeoutImages.append(fixedImage)
                     }
                     if let coord = PhotoLocationReporter.shared.extractGPS(from: data) {
                         let token = UserDefaults.standard.string(forKey: "convexAuthToken")

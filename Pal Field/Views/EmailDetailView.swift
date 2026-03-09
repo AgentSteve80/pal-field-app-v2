@@ -622,8 +622,9 @@ struct EmailDetailView: View {
         for item in items {
             if let data = try? await item.loadTransferable(type: Data.self),
                let image = UIImage(data: data) {
+                let fixedImage = image.fixedOrientation()
                 await MainActor.run {
-                    capturedImages.append(image)
+                    capturedImages.append(fixedImage)
                 }
             }
         }

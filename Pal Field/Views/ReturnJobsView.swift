@@ -500,14 +500,51 @@ struct ReturnJobCameraView: UIViewControllerRepresentable {
 // MARK: - UIImage Orientation Fix
 
 extension UIImage {
-    /// Normalize image orientation — fixes photos taken in landscape appearing rotated
+    /// Normalize image orientation — fixes photos taken in landscape/portrait appearing rotated
+    /// Applies the correct CGAffineTransform based on EXIF orientation, then renders upright
     func fixedOrientation() -> UIImage {
         guard imageOrientation != .up else { return self }
+        guard let cgImage = self.cgImage else { return self }
 
-        UIGraphicsBeginImageContextWithOptions(size, false, scale)
-        draw(in: CGRect(origin: .zero, size: size))
-        let normalized = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return normalized ?? self
+        var transform = CGAffineTransform.identity
+        let width = CGFloat(cgImage.width)
+        let height = CGFloat(cgImage.height)
+
+        switch imageOrientation {
+        case .down, .downMirrored:
+            transform = transform.translatedBy(x: width, y: height).rotated(by: .pi)
+        case .left, .leftMirrored:
+            transform = transform.translatedBy(x: width, y: 0).rotated(by: .pi / 2)
+        case .right, .rightMirrored:
+            transform = transform.translatedBy(x: 0, y: height).rotated(by: -.pi / 2)
+        default: break
+        }
+
+        switch imageOrientation {
+        case .upMirrored, .downMirrored:
+            transform = transform.translatedBy(x: width, y: 0).scaledBy(x: -1, y: 1)
+        case .leftMirrored, .rightMirrored:
+            transform = transform.translatedBy(x: height, y: 0).scaledBy(x: -1, y: 1)
+        default: break
+        }
+
+        let isRotated = imageOrientation == .left || imageOrientation == .leftMirrored ||
+                         imageOrientation == .right || imageOrientation == .rightMirrored
+        let canvasSize = isRotated ? CGSize(width: height, height: width) : CGSize(width: width, height: height)
+
+        guard let colorSpace = cgImage.colorSpace,
+              let ctx = CGContext(data: nil, width: Int(canvasSize.width), height: Int(canvasSize.height),
+                                 bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0,
+                                 space: colorSpace, bitmapInfo: cgImage.bitmapInfo.rawValue) else {
+            // Fallback: use renderer
+            let renderer = UIGraphicsImageRenderer(size: size)
+            return renderer.image { _ in draw(in: CGRect(origin: .zero, size: size)) }
+        }
+
+        ctx.concatenate(transform)
+        ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+
+        guard let newCGImage = ctx.makeImage() else { return self }
+        return UIImage(cgImage: newCGImage, scale: scale, orientation: .up)
     }
 }
