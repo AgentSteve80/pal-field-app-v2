@@ -67,26 +67,17 @@ final class ClerkAuthManager: ObservableObject {
     func getToken() async -> String? {
         let clerk = Clerk.shared
 
-        // Method 1: Use clerk.auth.getToken() (recommended by Clerk docs)
-        do {
-            let token = try await clerk.auth.getToken()
-            if let token {
-                print("✅ ClerkAuth: Got token via clerk.auth.getToken()")
-                UserDefaults.standard.set(token, forKey: cachedTokenKey)
-                return token
-            }
-        } catch {
-            print("⚠️ ClerkAuth: clerk.auth.getToken() failed: \(error)")
-        }
-
-        // Method 2: Try session.getToken with Convex template
+        // Method 1: Use session.getToken with Convex JWT template (has aud: "convex")
+        // This is what Convex requires — the default token from clerk.auth.getToken() won't work
         if let session = clerk.session {
             do {
                 let jwt = try await session.getToken(.init(template: "convex"))
                 if let jwt {
-                    print("✅ ClerkAuth: Got JWT via session.getToken(convex)")
+                    print("✅ ClerkAuth: Got Convex JWT via session.getToken(convex)")
                     UserDefaults.standard.set(jwt, forKey: cachedTokenKey)
                     return jwt
+                } else {
+                    print("⚠️ ClerkAuth: session.getToken(convex) returned nil")
                 }
             } catch {
                 print("⚠️ ClerkAuth: session.getToken(convex) failed: \(error)")
@@ -95,9 +86,9 @@ final class ClerkAuthManager: ObservableObject {
             print("⚠️ ClerkAuth: No active Clerk session")
         }
 
-        // Method 3: Fall back to cached token (may be expired)
+        // Method 2: Fall back to cached token (may be expired but works offline)
         if let cached = UserDefaults.standard.string(forKey: cachedTokenKey) {
-            print("⚠️ ClerkAuth: Using CACHED token (may be expired)")
+            print("⚠️ ClerkAuth: Using CACHED Convex token (may be expired)")
             return cached
         }
         print("❌ ClerkAuth: No token available at all")
