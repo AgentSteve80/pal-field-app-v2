@@ -121,16 +121,37 @@ struct SignInView: View {
         Task {
             do {
                 let clerk = Clerk.shared
-                _ = try await clerk.auth.signInWithPassword(identifier: email, password: password)
+                print("🔐 SignIn: Attempting sign-in for \(email)...")
+                let result = try await clerk.auth.signInWithPassword(identifier: email, password: password)
+                print("🔐 SignIn: Result status = \(result.status)")
 
-                // Sign-in succeeded — force an immediate session check
+                // Wait a moment for Clerk SDK to update internal state
+                try? await Task.sleep(nanoseconds: 500_000_000) // 0.5s
+
+                // Check if session is now active
+                let hasSession = clerk.session != nil
+                let hasUser = clerk.user != nil
+                print("🔐 SignIn: Post-login — session=\(hasSession), user=\(hasUser)")
+                if let user = clerk.user {
+                    print("🔐 SignIn: User = \(user.id), email = \(user.primaryEmailAddress?.emailAddress ?? "none")")
+                }
+
+                // Force update auth state
                 await MainActor.run {
                     authManager.handleSessionChange()
+                    print("🔐 SignIn: isAuthenticated = \(authManager.isAuthenticated)")
                     isSigningIn = false
-                    dismiss()
+
+                    if authManager.isAuthenticated {
+                        dismiss()
+                    } else {
+                        // Auth didn't stick — show helpful error
+                        errorMessage = "Signed in but session not detected. Try closing and reopening the app."
+                    }
                 }
             } catch {
                 await MainActor.run {
+                    print("🔐 SignIn: FAILED — \(error)")
                     errorMessage = "Sign-in failed: \(error.localizedDescription)"
                     isSigningIn = false
                 }

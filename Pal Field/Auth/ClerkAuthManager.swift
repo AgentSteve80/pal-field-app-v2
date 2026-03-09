@@ -166,14 +166,17 @@ final class ClerkAuthManager: ObservableObject {
             let lastName = user.lastName ?? ""
             let displayName = "\(firstName) \(lastName)".trimmingCharacters(in: .whitespaces)
 
+            let isNewSignIn = clerkUserId != userId || !isAuthenticated
+            
             clerkUserId = userId
             clerkEmail = email
             clerkDisplayName = displayName.isEmpty ? email : displayName
             isAuthenticated = true
             isLoading = false
 
-            // Only cache if this is a new sign-in (not every poll)
-            if clerkUserId != userId || !isAuthenticated {
+            // Cache on new sign-in and trigger Convex user upsert
+            if isNewSignIn {
+                print("🔐 ClerkAuth: New sign-in detected for \(email ?? "unknown")")
                 cacheAuth(userId: userId, email: email, displayName: displayName.isEmpty ? nil : displayName)
 
                 Task {
