@@ -72,16 +72,27 @@ final class ClerkAuthManager: ObservableObject {
             do {
                 let jwt = try await session.getToken(.init(template: "convex"))
                 if let jwt {
+                    print("✅ ClerkAuth: Got fresh JWT (\(jwt.prefix(20))...)")
                     UserDefaults.standard.set(jwt, forKey: cachedTokenKey)
+                    return jwt
+                } else {
+                    print("⚠️ ClerkAuth: session.getToken returned nil")
                 }
-                return jwt
             } catch {
                 print("⚠️ ClerkAuth: Failed to get fresh token: \(error)")
+                // Session might be expired — try signing in again
+                print("⚠️ ClerkAuth: Session may be expired. User should sign out and back in.")
             }
+        } else {
+            print("⚠️ ClerkAuth: No active Clerk session")
         }
 
-        // Fall back to cached token
-        return UserDefaults.standard.string(forKey: cachedTokenKey)
+        // Fall back to cached token (may be expired — log warning)
+        if let cached = UserDefaults.standard.string(forKey: cachedTokenKey) {
+            print("⚠️ ClerkAuth: Using CACHED token (may be expired)")
+            return cached
+        }
+        return nil
     }
 
     /// Sign out — clears cached tokens

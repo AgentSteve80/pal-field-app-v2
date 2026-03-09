@@ -238,6 +238,13 @@ struct InventoryView: View {
     private func pollSyncCompletion(itemCount: Int, attempt: Int = 0) {
         // Check if sync is done after a delay
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            // Check for auth errors first
+            if let error = syncManager.lastError, error.contains("401") || error.contains("Unauthenticated") {
+                isSyncing = false
+                syncError = "Sign-in expired. Go to Settings → Sign Out, then sign back in and try again."
+                return
+            }
+
             let stillPending = allItems.filter { $0.syncStatusRaw == 1 }.count
             print("📦 Inventory: Poll \(attempt + 1) — \(stillPending) still pending")
 
@@ -252,7 +259,9 @@ struct InventoryView: View {
                 // Timeout — some didn't sync
                 isSyncing = false
                 let synced = itemCount - stillPending
-                if synced > 0 {
+                if let error = syncManager.lastError {
+                    syncError = "Sync failed: \(error)"
+                } else if synced > 0 {
                     syncError = "\(synced)/\(itemCount) items synced. \(stillPending) failed — check your connection and try again."
                 } else {
                     syncError = "Sync timed out. Check your internet connection and try again."
