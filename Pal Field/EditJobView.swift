@@ -41,6 +41,9 @@ struct EditJobView: View {
     @State private var showGeocodeQuery = false
     @State private var geocodeQuery: String
     @State private var showDeleteAlert = false
+    @State private var showCreateReturnAlert = false
+    @State private var returnReason = ""
+    @State private var showReturnCreated = false
     @State private var showingCloseoutEmail = false
     @State private var voiceNotePath: String?
     @State private var superNotes: String  // Voice note transcription → job.superNotes
@@ -150,6 +153,7 @@ struct EditJobView: View {
                 closeoutPartsSection
                 closeoutPhotosSection
                 closeoutStatusSection
+                createReturnJobSection
                 totalSection
                 sendCloseoutSection
             }
@@ -585,6 +589,62 @@ struct EditJobView: View {
 
     // MARK: - Total Section
 
+    // MARK: - Create Return Job (manual)
+
+    private var createReturnJobSection: some View {
+        Section {
+            // Don't show if this IS a return job, or if there's already a pending return for it
+            if !job.isReturnJob {
+                Button {
+                    showCreateReturnAlert = true
+                } label: {
+                    Label("Create Return Job", systemImage: "arrow.uturn.backward.circle.fill")
+                        .foregroundStyle(.orange)
+                }
+            }
+        }
+        .alert("Create Return Job", isPresented: $showCreateReturnAlert) {
+            TextField("Reason for return", text: $returnReason)
+            Button("Cancel", role: .cancel) { returnReason = "" }
+            Button("Create") {
+                createManualReturnJob()
+            }
+        } message: {
+            Text("This will create a return job for \(job.address.isEmpty ? job.lotNumber : job.address). What needs to be done?")
+        }
+        .alert("Return Job Created ✅", isPresented: $showReturnCreated) {
+            Button("OK") { }
+        } message: {
+            Text("RT-\(job.jobNumber) added to Return Jobs. You'll see it on the main screen.")
+        }
+    }
+
+    private func createManualReturnJob() {
+        let returnJob = Job()
+        returnJob.jobNumber = "RT-\(job.jobNumber)"
+        returnJob.jobDate = Date()
+        returnJob.lotNumber = job.lotNumber
+        returnJob.address = job.address
+        returnJob.subdivision = job.subdivision
+        returnJob.prospect = job.prospect
+        returnJob.builderCompany = job.builderCompany
+        returnJob.ownerEmail = job.ownerEmail
+        returnJob.ownerName = job.ownerName
+        returnJob.isReturnJob = true
+        returnJob.returnJobStatus = "pending"
+        returnJob.parentJobId = job.id.uuidString
+        returnJob.notCompleted = returnReason
+        // Copy threading info
+        returnJob.sourceEmailThreadId = job.sourceEmailThreadId
+        returnJob.sourceEmailMessageId = job.sourceEmailMessageId
+        returnJob.sourceEmailSubject = job.sourceEmailSubject
+        modelContext.insert(returnJob)
+        try? modelContext.save()
+        returnReason = ""
+        showReturnCreated = true
+        HapticManager.success()
+    }
+
     private var totalSection: some View {
         Section {
             HStack {
@@ -981,7 +1041,7 @@ struct EditJobView: View {
                     job.closeoutPhotoPaths = photoPaths
 
                     // Auto-create Return Job if completion <= 99%
-                    if completionPercentage <= 99 && !notCompleted.isEmpty {
+                    if completionPercentage <= 99 {
                         let returnJob = Job()
                         returnJob.jobNumber = "RT-\(job.jobNumber)"
                         returnJob.jobDate = Date()
